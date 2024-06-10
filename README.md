@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # skeleton
 
 This template should help get you started developing with Vue 3 in Vite.
@@ -27,3 +28,7 @@ npm run dev
 ```sh
 npm run build
 ```
+=======
+# accountbook
+kb 스켈레톤 프로젝트 가계부 서비스
+>>>>>>> c7b117c42732075cc44b95c66eee45d862d1efce
