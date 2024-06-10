@@ -1,3 +1,12 @@
+---
+name: ISSUE_TEMPLATE
+about: MONEYTRACKER_ISSUE_TEMPLATE
+title: ''
+labels: ''
+assignees: ''
+
+---
+
 ## 🧐 설명!
 - 문제가 무엇인지에 대한 명확하고 간결한 설명.
  
