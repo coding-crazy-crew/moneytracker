@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="outer">
       <div class="tab">
         <Tab @tab-selected="filterEvents"/>
       </div>
@@ -87,8 +87,12 @@
   </script>
   
   <style scoped>
+  .outer{
+    background-color: #D8EFD3;
+  }
   .tab{
-    margin: 20px auto;
+    padding-top:40px;
+    margin:auto;
     width: 80%;
     max-width: 1200px;
    
