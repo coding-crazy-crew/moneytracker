@@ -1,6 +1,6 @@
 <template>
     <div>
-      <div class="Tab">
+      <div class="tab">
         <Tab @tab-selected="filterEvents"/>
       </div>
       <div class="calendar">
@@ -18,6 +18,7 @@
   import axios from 'axios';
   
   export default {
+    name:"calendar",
     components: {
       FullCalendar, Tab
     },
@@ -79,8 +80,21 @@
   </script>
   
   <style scoped>
-  .calendar {
+  .tab{
+    margin: 20px auto;
+    width: 80%;
+    max-width: 1200px;
+   
+  }
+  .calendar{
+    margin: 20px auto;
+    padding: 20px;
+    width: 80%;
+    max-width: 1200px;
+    border-radius: 8px;
     background-color: #F1F8E8;
   }
+
+  
   </style>
   

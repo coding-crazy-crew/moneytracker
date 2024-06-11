@@ -42,8 +42,8 @@
   }
   button {
     border-color: black;
-    width: 300px;
-    height: 40px;
+    width: 400px;
+    height: 50px;
     background-color: #F1F8E8;
     border: none;
     cursor: pointer;

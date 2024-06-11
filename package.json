@@ -9,15 +9,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
-<<<<<<< HEAD
+
     "@fullcalendar/core": "^6.1.14",
     "@fullcalendar/daygrid": "^6.1.14",
     "@fullcalendar/interaction": "^6.1.14",
     "@fullcalendar/vue3": "^6.1.14",
     "axios": "^1.7.2",
-=======
+
     "bootstrap": "^5.3.3",
->>>>>>> 0b20f1a6810811f5c76ca58221ebc305381e8fcb
+
     "pinia": "^2.1.7",
     "vue": "^3.4.21",
     "vue-router": "^4.3.2"
