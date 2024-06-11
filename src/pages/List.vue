@@ -1,12 +1,18 @@
 <template lang="">
     <div>
-        <div>필터</div>
+        <div>
+            <select class="form-select" v-model="filteredType">
+                    <option value="all" selected>All</option>
+                    <option value="income">Income</option>
+                    <option value="expenses">Expenses</option>
+                </select>
+        </div>
         <div>
             <a href="#" class="previous round" @click="previousMonthList">&#8249;</a>
             {{currentDate.year}}-{{currentDate.month}}
             <a href="#" class="`next round" @click="nextMonthList">&#8250;</a></div>
-        <div>리스트
-            <table>
+        <div>
+            <table border="1">
                 <thead>
                     <tr>
                         <td>날짜</td>
@@ -30,12 +36,11 @@
             </table>
         </div>
     </div>
-    
 </template>
 <script>
 
 import axios from 'axios';
-import {computed, onMounted,reactive} from 'vue';
+import {computed, onMounted,reactive, ref} from 'vue';
 export default {
     name : "List",
     setup(){
@@ -44,6 +49,7 @@ export default {
             year : 2024,
             month : "01"
         })
+        const filteredType = ref('all')
 
         onMounted(async() => {
             currentDate.year = new Date().getFullYear()
@@ -54,23 +60,27 @@ export default {
         // getCurrentMonthList : 기록 내역 가져오기
         const getCurrentMonthList = async()=>{
             const response = await axios.get('http://localhost:3000/data')
-            response.data.map((item)=>item.date= formatDate(item, item.date))
+            response.data.map((item)=>item.date= formatDate(item.date))
             Object.assign(lists,response.data)
         }
 
         // formDate : 날짜를 'YYYY-MM-DD'형식으로 변환하는 함수
-        const formatDate = (item,date) => {
+        const formatDate = (date) => {
             const d = new Date(date)
-            item.year = d.getFullYear()
-            item.month = String(d.getMonth() + 1).padStart(2, '0')
-            item.day = String(d.getDate()).padStart(2, '0')
-            return `${item.year}-${item.month}-${item.day}`
+            const year = d.getFullYear()
+            const month = String(d.getMonth() + 1).padStart(2, '0')
+            const day = String(d.getDate()).padStart(2, '0')
+            return `${year}-${month}-${day}`
         }
         
         // filteredItems : Filter 항목을 적용하여 list 반환
         const filteredItems = computed(() => {
-            return lists.filter(item => item.date.substr(0,7)  === `${currentDate.year}-${currentDate.month}`);
+            let dateFiltered = lists.filter(item => item.date.substr(0,7)  === `${currentDate.year}-${currentDate.month}`)
+            return filteredType.value ==='all' ? dateFiltered : dateFiltered.filter(item =>item.type === filteredType.value)
         });
+        const filteredTypeItems = computed(()=>{
+            return 
+        })
 
         // nextMonthList : 다음 월의 내역 가지고오기
         const nextMonthList = (event) =>{
@@ -85,13 +95,14 @@ export default {
         // previousMonthList : 이전 월의 내역 가지고오기
         const previousMonthList = (event) =>{
             if(currentDate.month <2){
-                currentDate.month = 12
+                currentDate.month = '12'
                 currentDate.year--
             }else{
-                currentDate.month--
+                currentDate.month =String(parseInt(currentDate.month) -1).padStart(2,'0')
             }
         }
-        return {currentDate,nextMonthList,previousMonthList,filteredItems}
+
+        return {currentDate,nextMonthList,previousMonthList,filteredItems,filteredType}
     }
 }
 </script>
