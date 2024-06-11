@@ -2,9 +2,9 @@
     <div>
         <div>
             <select class="form-select" v-model="filteredType">
-                    <option value="all" selected>All</option>
-                    <option value="income">Income</option>
-                    <option value="expenses">Expenses</option>
+                    <option value="all" selected>전체</option>
+                    <option value="수입">수입</option>
+                    <option value="지출">지출</option>
                 </select>
         </div>
         <div>
@@ -23,8 +23,8 @@
                         <!-- <td>내용</td> -->
                     </tr>
                 </thead>
-                <tbody>
-                    <tr v-for="i in filteredItems" :key="i.id" :class="`tr ${i.id}`">
+                <tbody >
+                    <tr v-for="i in filteredItems" :key="i.id" :class="`tr ${i.id}`" @click="itemClickHandler" >
                         <td>{{i.date}}</td>
                         <td>{{i.amount}}</td>
                         <td>{{i.asset}}</td>
@@ -45,11 +45,11 @@ export default {
     name : "List",
     setup(){
         const lists = reactive([]) //기본 모든 정보
+        const filteredType = ref('all')
         const currentDate = reactive({
             year : 2024,
             month : "01"
         })
-        const filteredType = ref('all')
 
         onMounted(async() => {
             currentDate.year = new Date().getFullYear()
@@ -60,7 +60,9 @@ export default {
         // getCurrentMonthList : 기록 내역 가져오기
         const getCurrentMonthList = async()=>{
             const response = await axios.get('http://localhost:3000/data')
-            response.data.map((item)=>item.date= formatDate(item.date))
+            response.data.map((item)=>{
+                item.type = item.type=== 'expense' ? '지출' : '수입'
+                item.date= formatDate(item.date)})
             Object.assign(lists,response.data)
         }
 
@@ -78,9 +80,6 @@ export default {
             let dateFiltered = lists.filter(item => item.date.substr(0,7)  === `${currentDate.year}-${currentDate.month}`)
             return filteredType.value ==='all' ? dateFiltered : dateFiltered.filter(item =>item.type === filteredType.value)
         });
-        const filteredTypeItems = computed(()=>{
-            return 
-        })
 
         // nextMonthList : 다음 월의 내역 가지고오기
         const nextMonthList = (event) =>{
@@ -102,7 +101,11 @@ export default {
             }
         }
 
-        return {currentDate,nextMonthList,previousMonthList,filteredItems,filteredType}
+        const itemClickHandler = (event)=>{
+            console.log(event.currentTarget.getAttribute('class').split(' ')[1])
+            
+        }
+        return {currentDate,nextMonthList,previousMonthList,filteredItems,filteredType, itemClickHandler}
     }
 }
 </script>
