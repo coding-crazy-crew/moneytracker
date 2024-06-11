@@ -26,7 +26,7 @@
       const calendarOptions = reactive({
         plugins: [dayGridPlugin, interactionPlugin],
         initialView: 'dayGridMonth',
-        dateClick: handleDateClick,
+        dateClick: dateClickHandler,
         events: []
       });
   
@@ -42,10 +42,15 @@
           const events = response.data.map(event => ({
             title: `${event.amount.toLocaleString()} ${event.type === 'income' ? '수입' : '지출'}`,
             start: formatDate(event.date),
-            type: event.type // 이벤트 타입 추가
+            type: event.type, 
+            textColor:'black',
+            borderColor:'#F1F8E8',
+            backgroundColor:'#F1F8E8'
           }));
           allEvents.value = events;
-          calendarOptions.events = events; // 초기값은 전체 데이터를 표시
+          calendarOptions.events = events; // 초기값은 전체 데이터를 표시]
+          
+
         } catch (error) {
           console.error('Error fetching events:', error);
         }
@@ -54,7 +59,8 @@
       const filterEvents = (type) => {
         if (type === 'all') {
           calendarOptions.events = allEvents.value;
-        } else {
+        } 
+        else {
           calendarOptions.events = allEvents.value.filter(event => event.type === type);
         }
       };
@@ -66,9 +72,10 @@
         const day = String(d.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
       };
-  
-      function handleDateClick(arg) {
-        alert('date click! ' + arg.dateStr);
+
+      //dateClickHandler: 날짜 클릭시 drawer화면 호출
+      function dateClickHandler(arg) {
+        alert('수정필요 ' + arg.dateStr);
       }
   
       return {
