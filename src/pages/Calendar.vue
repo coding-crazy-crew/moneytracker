@@ -1,12 +1,12 @@
 <template>
-    <div class="Tab">
-        <Tab/>
+    <div>
+      <div class="Tab">
+        <Tab @tab-selected="filterEvents"/>
+      </div>
+      <div class="calendar">
+        <FullCalendar :options="calendarOptions" />
+      </div>
     </div>
- <div class="calendar">
-
-    <FullCalendar :options="calendarOptions" />
- </div>
- 
   </template>
   
   <script>
@@ -19,17 +19,18 @@
   
   export default {
     components: {
-      FullCalendar ,Tab
+      FullCalendar, Tab
     },
     setup() {
       const calendarOptions = reactive({
         plugins: [dayGridPlugin, interactionPlugin],
         initialView: 'dayGridMonth',
         dateClick: handleDateClick,
-        events: [] 
+        events: []
       });
   
-      
+      const allEvents = ref([]);
+  
       onMounted(() => {
         requestList();
       });
@@ -37,18 +38,26 @@
       const requestList = async () => {
         try {
           const response = await axios.get('http://localhost:3000/data');
-          console.log(response.data);
           const events = response.data.map(event => ({
             title: `${event.amount.toLocaleString()} ${event.type === 'income' ? '수입' : '지출'}`,
-            start: formatDate(event.date)
+            start: formatDate(event.date),
+            type: event.type // 이벤트 타입 추가
           }));
-          calendarOptions.events = events;
+          allEvents.value = events;
+          calendarOptions.events = events; // 초기값은 전체 데이터를 표시
         } catch (error) {
           console.error('Error fetching events:', error);
         }
       };
   
-      // formDate:  날짜를 'YYYY-MM-DD' 형식으로 변환하는 함수
+      const filterEvents = (type) => {
+        if (type === 'all') {
+          calendarOptions.events = allEvents.value;
+        } else {
+          calendarOptions.events = allEvents.value.filter(event => event.type === type);
+        }
+      };
+  
       const formatDate = (date) => {
         const d = new Date(date);
         const year = d.getFullYear();
@@ -57,23 +66,21 @@
         return `${year}-${month}-${day}`;
       };
   
-      // handleDateClick: 날짜 클릭 함수, 클릭시 세부 일정 보임
       function handleDateClick(arg) {
         alert('date click! ' + arg.dateStr);
       }
   
       return {
-        calendarOptions
+        calendarOptions,
+        filterEvents
       };
     }
   };
   </script>
   
   <style scoped>
- 
-  .calendar{
-    background-color: #D8EFD3;
+  .calendar {
+    background-color: #F1F8E8;
   }
-
   </style>
   
