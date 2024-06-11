@@ -13,16 +13,18 @@
                         <td>금액</td>
                         <td>유형</td>
                         <td>분류</td>
+                        <td>카테고리</td>
                         <td>자산</td>
                         <td>내용</td>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="i in lists" :key="i.id" :class="`tr ${i.id}`">
+                    <tr v-for="i in filteredItems" :key="i.id" :class="`tr ${i.id}`">
                         <td>{{i.id}}</td>
                         <td>{{i.type}}</td>
                         <td>{{i.date}}</td>
                         <td>{{i.amount}}</td>
+                        <td>{{i.category}}</td>
                         <td>{{i.asset}}</td>
                         <!-- <td>{{i.content}}</td> -->
                     </tr>
@@ -31,58 +33,59 @@
         </div>
     </div>
     {{currentDate}}
+    
 </template>
 <script>
 
 import axios from 'axios';
-import {computed, onMounted,reactive, ref} from 'vue';
+import {computed, onMounted,reactive} from 'vue';
 export default {
     name : "List",
     setup(){
-        
-        let lists = reactive([])
+        const lists = reactive([]) //기본 모든 정보
         const currentDate = reactive({
             year : 2024,
-            month : 1
+            month : "01"
         })
+
         onMounted(async() => {
             currentDate.year = new Date().getFullYear()
-            currentDate.month = new Date().getMonth() + 1
+            currentDate.month = String(new Date().getMonth() + 1).padStart(2,'0')
             await getCurrentMonthList()
-            // lists.filter(function(date){
-            //     console.log(date)
-            //     console.log('--------')
-            // })
         })
         
-        //내역 가져오기
+        // getCurrentMonthList : 기록 내역 가져오기
         const getCurrentMonthList = async()=>{
-            const response = await axios.get('http://localhost:3001/data')
-            response.data.map(item=>item.date= formatDate(item.date))
+            const response = await axios.get('http://localhost:3000/data')
+            response.data.map((item)=>item.date= formatDate(item, item.date))
             Object.assign(lists,response.data)
         }
-        //formDate : 날짜를 'YYYY-MM-DD'형식으로 변환하는 함수
-        const formatDate = (date) => {
+
+        // formDate : 날짜를 'YYYY-MM-DD'형식으로 변환하는 함수
+        const formatDate = (item,date) => {
             const d = new Date(date)
-            const year = d.getFullYear()
-            const month = String(d.getMonth() + 1).padStart(2, '0')
-            const day = String(d.getDate()).padStart(2, '0')
-            return `${year}-${month}-${day}`
+            item.year = d.getFullYear()
+            item.month = String(d.getMonth() + 1).padStart(2, '0')
+            item.day = String(d.getDate()).padStart(2, '0')
+            return `${item.year}-${item.month}-${item.day}`
         }
+        
+        // filteredItems : Filter 항목을 적용하여 list 반환
+        const filteredItems = computed(() => {
+            return lists.filter(item => item.date.substr(0,7)  === `${currentDate.year}-${currentDate.month}`);
+        });
 
-        const filteredTest = computed(()=>{
-            return lists.filter(i =>i.date === currentDate.month)
-        })
-
-        // 다음 월의 내역 가지고오기
+        // nextMonthList : 다음 월의 내역 가지고오기
         const nextMonthList = (event) =>{
-            if(currentDate.month >11){
-                currentDate.month = 1
+            if(parseInt(currentDate.month) >11){
+                currentDate.month = "01"
                 currentDate.year++
             }else{
-                currentDate.month++
+                currentDate.month = String(parseInt(currentDate.month) +1).padStart(2,'0')
             }
         }
+
+        // previousMonthList : 이전 월의 내역 가지고오기
         const previousMonthList = (event) =>{
             if(currentDate.month <2){
                 currentDate.month = 12
@@ -91,7 +94,7 @@ export default {
                 currentDate.month--
             }
         }
-        return {lists,currentDate,nextMonthList,previousMonthList}
+        return {currentDate,nextMonthList,previousMonthList,filteredItems}
     }
 }
 </script>

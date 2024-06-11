@@ -12,7 +12,7 @@
                         <a class="nav-link active" href="#home">홈</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#history">내역</a>
+                        <router-link to="/list" class="nav-link">내역</router-link>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#calendar">달력</a>
@@ -23,9 +23,7 @@
                 </ul>
             </div>
         </nav>
-        <div class="main-content">
-            본문 내용
-        </div>
+        
     </div>
 </template>
 
@@ -87,12 +85,4 @@ export default {
     color: #166152 !important;
 }
 
-.main-content {
-    background-color: #D9D9D9;
-    margin: 20px auto;
-    padding: 20px;
-    width: 80%;
-    max-width: 1200px;
-    border-radius: 8px;
-}
 </style>
