@@ -1,10 +1,16 @@
 <template>
-   <div class="calendar">
+    <div class="Tab">
+        <Tab/>
+    </div>
+ <div class="calendar">
+
     <FullCalendar :options="calendarOptions" />
-   </div>
+ </div>
+ 
   </template>
   
   <script>
+  import Tab from "@/components/Tab.vue";
   import { ref, onMounted, reactive } from 'vue';
   import FullCalendar from '@fullcalendar/vue3';
   import dayGridPlugin from '@fullcalendar/daygrid';
@@ -13,7 +19,7 @@
   
   export default {
     components: {
-      FullCalendar 
+      FullCalendar ,Tab
     },
     setup() {
       const calendarOptions = reactive({
@@ -66,7 +72,8 @@
   <style scoped>
  
   .calendar{
-    background-color: #F1F8E8;
+    background-color: #D8EFD3;
   }
+
   </style>
   
