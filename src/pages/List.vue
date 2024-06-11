@@ -14,25 +14,22 @@
                         <td>유형</td>
                         <td>분류</td>
                         <td>카테고리</td>
-                        <td>자산</td>
-                        <td>내용</td>
+                        <!-- <td>내용</td> -->
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="i in filteredItems" :key="i.id" :class="`tr ${i.id}`">
-                        <td>{{i.id}}</td>
-                        <td>{{i.type}}</td>
                         <td>{{i.date}}</td>
                         <td>{{i.amount}}</td>
-                        <td>{{i.category}}</td>
                         <td>{{i.asset}}</td>
+                        <td>{{i.type}}</td>
+                        <td>{{i.category}}</td>
                         <!-- <td>{{i.content}}</td> -->
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
-    {{currentDate}}
     
 </template>
 <script>
