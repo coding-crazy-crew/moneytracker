@@ -15,7 +15,7 @@
                         <router-link to="/list" class="nav-link">내역</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link to="/calendar">달력</router-link>
+                        <router-link to="/calendar" class="nav-link">달력</router-link>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#settings">설정</a>

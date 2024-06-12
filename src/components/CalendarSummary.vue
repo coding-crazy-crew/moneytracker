@@ -1,6 +1,6 @@
 <template>
   <div class="summary">
-    <h3>현재 월 요약</h3>
+    <h3>월별 총 지출</h3>
     <p v-bind="incomeBind">수입: {{ incomeBind.text }} 원</p>
     <p v-bind="expensesBind">지출: {{ expensesBind.text }} 원</p>
   </div>

@@ -1,28 +1,30 @@
 <template>
   <div class="outer">
     <div class="tab">
+      <div class="summary">
+        <CalendarSummary :currentMonthSummary="currentMonthSummary" />
+      </div>
       <Tab @tab-selected="filterEvents" />
     </div>
     <div class="calendar">
       <FullCalendar :options="calendarOptions" @datesSet="updateCurrentMonth" />
     </div>
-    <div class="summary">
-      <CalendarSummary :currentMonthSummary="currentMonthSummary" />
-    </div>
+    <ToRegisterButton/>
   </div>
 </template>
 
 <script>
+import ToRegisterButton from "@/components/ToRegisterButton.vue"
 import Tab from "@/components/Tab.vue";
 import { ref, onMounted, reactive, watch } from "vue";
 import FullCalendar from "@fullcalendar/vue3";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import axios from "axios";
-import CalendarSummary from "@/components/CalendarSummary.vue";
+import CalendarSummary from "@/components/CalendarSummary.vue"
 
 export default {
-  name: "Calendar",
+  name: "CalendarView", // 컴포넌트 이름 변경
   components: {
     FullCalendar,
     Tab,
@@ -34,12 +36,14 @@ export default {
       initialView: "dayGridMonth",
       dateClick: dateClickHandler,
       events: [],
-      locale:"ko"
-    });
+      locale: "ko", // 한국어로 설정
+      prev:'chevron-left',
+      next:'chevron-right'
+    })
 
     const allEvents = ref([]);
-    const monthlySummary = ref({});
-    const currentMonth = ref(new Date().toISOString().substring(0, 7)); // 현재 월
+    const monthlySummary = ref({}); // 월별 수입 및 지출을 저장할 객체
+    const currentMonth = ref(new Date().toISOString().substring(0, 7));
     const currentMonthSummary = ref({ income: 0, expenses: 0 });
 
     onMounted(() => {
@@ -50,9 +54,7 @@ export default {
       try {
         const response = await axios.get("http://localhost:3000/data");
         const events = response.data.map((event) => ({
-          title: `${event.amount.toLocaleString()} ${
-            event.type === "income" ? "(+)" : "(-)"
-          }`,
+          title: `${event.amount.toLocaleString()} ${event.type === "income" ? "(+)" : "(-)"}`,
           start: formatDate(event.date),
           type: event.type,
           amount: event.amount,
@@ -62,8 +64,8 @@ export default {
         }));
 
         allEvents.value = events;
-        calendarOptions.events = events; // 초기값은 전체 데이터를 표시
-        calculateMonthlySummary(events);
+        calendarOptions.events = events;
+        calculateMonthlySummary(events); // 월별 요약 업데이트
         updateCurrentMonthSummary();
       } catch (error) {
         console.error("Error fetching events:", error);
@@ -116,6 +118,8 @@ export default {
     };
 
     function dateClickHandler(arg) {
+      axios.get("http/localhost:3000/data")
+      
       alert("수정 필요 " + arg.dateStr);
     }
 
