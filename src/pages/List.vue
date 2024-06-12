@@ -29,8 +29,8 @@
                     </thead>
                     <tbody class="tb-tbody">
                         <tr v-for="i in filteredItems" :key="i.id" :class="`tr ${i.id}`" @click="itemClickHandler" >
-                            <td>{{i.date}}</td>
-                            <td>{{i.amount}}</td>
+                            <td>{{i.date.substring(2)}}</td>
+                            <td>{{i.amount.toLocaleString('ko-KR')}}</td>
                             <td><span class="type">{{i.type}}</span></td>
                             <td>{{i.asset}}</td>
                             <td>{{i.category}}</td>
@@ -107,8 +107,10 @@ export default {
             }
         }
 
+        //itemClickHandler : 수정 삭제 컴포넌트 visible 관리
         const itemClickHandler = (event)=>{
             console.log(event.currentTarget.getAttribute('class').split(' ')[1])
+            //컴포넌트 props 설정필요
         }
         return {currentDate,nextMonthList,previousMonthList,filteredItems,filteredType, itemClickHandler}
     }
@@ -151,14 +153,18 @@ export default {
         border-radius: 2em 2em 0 0;
         border : 0.1px solid #55AD98;
         background-color: #55AD98;
+        min-width: 100%;
+        table-layout: fixed;
     }
     .tb-thead{
         /* background-color: #55AD9B; */
         font-size: large;
+        font-weight: bold;
         text-align: center;
         color: #F1F8E8;
         height: 3em;
         padding: 2em;
+        
     } 
     .tb-tbody{
         background-color: #F1F8E8;
