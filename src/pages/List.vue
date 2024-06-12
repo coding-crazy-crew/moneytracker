@@ -34,7 +34,7 @@
                             <td><span class="type">{{i.type}}</span></td>
                             <td>{{i.asset}}</td>
                             <td>{{i.category}}</td>
-                            <td>{{i.content}}</td>
+                            <td class="content">{{i.content}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -67,7 +67,9 @@ export default {
             const response = await axios.get('http://localhost:3000/data')
             response.data.map((item)=>{
                 item.type = item.type=== 'expenses' ? '지출' : '수입'
-                item.date= formatDate(item.date)})
+                item.date= formatDate(item.date)
+                item.content = item.content.length < 100 ? item.content : item.content.substr(0,100) +" ..."
+            })
             Object.assign(lists,response.data)
         }
 
@@ -132,7 +134,6 @@ export default {
         max-width: 1200px;
         border-radius: 8px;
     }
-
     .grid-container{
         display: grid;
         grid-template-columns: repeat(2,1fr);
@@ -145,8 +146,8 @@ export default {
         padding : 4px 10px;
         border-radius: 20px;
     }
+
     /* table style */
-    
     .tb {
         /* padding:0.5em; */
         border-collapse: separate;
@@ -171,15 +172,16 @@ export default {
         text-align: center;
         border : 1px solid black
     } 
-    
     .type{
         background-color:#D8EFD3;
         padding: 10px 15px;
         border-radius: 10px;
         border : 1px solid #D8EFD3;
     }
+    .tr{
+        padding: 10px;
+    }
 
-    
     /* button style */
     .form-select{
         max-width:40%;
@@ -201,7 +203,4 @@ export default {
     .round {
         border-radius: 50%;
         }  
-
-
-
 </style>
