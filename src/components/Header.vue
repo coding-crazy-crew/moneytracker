@@ -23,7 +23,6 @@
                 </ul>
             </div>
         </nav>
-        
     </div>
 </template>
 
