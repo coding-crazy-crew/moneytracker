@@ -9,23 +9,20 @@
             <div class="container-fluid">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#home">홈</a>
+                        <router-link to="/" class="nav-link">홈</router-link>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#history">내역</a>
+                        <router-link to="/list" class="nav-link">내역</router-link>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#calendar">달력</a>
+                        <router-link to="/calendar" class="nav-link">달력</router-link>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#settings">설정</a>
+                        <router-link to="/settings" class="nav-link">설정</router-link>
                     </li>
                 </ul>
             </div>
         </nav>
-        <div class="main-content">
-            본문 내용
-        </div>
     </div>
 </template>
 
@@ -85,14 +82,5 @@ export default {
 
 .nav-link:hover {
     color: #166152 !important;
-}
-
-.main-content {
-    background-color: #D9D9D9;
-    margin: 20px auto;
-    padding: 20px;
-    width: 80%;
-    max-width: 1200px;
-    border-radius: 8px;
 }
 </style>
