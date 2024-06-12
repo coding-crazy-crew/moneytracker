@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Calendar from "@/pages/Calendar.vue";
+import { createRouter, createWebHistory } from 'vue-router'
+import List from '@/pages/List.vue'
 
 import Register from "@/pages/Register.vue";
 
@@ -22,5 +24,10 @@ const router = createRouter({
     { path: "/register", name: "register", component: Register, }
   ],
 });
+    {
+      path: '/list',component: List},
+    { path: '/register', name: 'register', component: Register}
+  ]
+})
 
 export default router;
