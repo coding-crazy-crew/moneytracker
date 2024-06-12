@@ -42,16 +42,16 @@ export default {
         const response = await axios.get("http://localhost:3000/data");
         const events = response.data.map((event) => ({
           title: `${event.amount.toLocaleString()} ${
-            event.type === "income" ? "수입" : "지출"
+            event.type === "income" ? "(+)" : "(-)"
           }`,
           start: formatDate(event.date),
           type: event.type,
-          textColor: "black",
+          textColor: event.type === "income" ? "#55AD9B" : "black",
           borderColor: "#F1F8E8",
           backgroundColor: "#F1F8E8",
         }));
         allEvents.value = events;
-        calendarOptions.events = events; // 초기값은 전체 데이터를 표시]
+        calendarOptions.events = events; // 초기값은 전체 데이터를 표시
       } catch (error) {
         console.error("Error fetching events:", error);
       }
@@ -75,9 +75,9 @@ export default {
       return `${year}-${month}-${day}`;
     };
 
-    //dateClickHandler: 날짜 클릭시 drawer화면 호출
+    // dateClickHandler: 날짜 클릭 시 drawer 화면 호출
     function dateClickHandler(arg) {
-      alert("수정필요 " + arg.dateStr);
+      alert("수정 필요 " + arg.dateStr);
     }
 
     return {
@@ -91,6 +91,7 @@ export default {
 <style scoped>
 .outer {
   background-color: #d8efd3;
+  padding-bottom: 80px;
 }
 .tab {
   padding-top: 40px;
@@ -111,5 +112,6 @@ export default {
 :deep(.fc-daygrid-day-number),
 :deep(.fc-col-header-cell-cushion) {
   color: black;
+  text-decoration: none;
 }
 </style>
