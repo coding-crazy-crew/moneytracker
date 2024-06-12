@@ -9,7 +9,7 @@
             <div class="container-fluid">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#home">홈</a>
+                        <router-link to="/" class="nav-link">홈</router-link>
                     </li>
                     <li class="nav-item">
                         <router-link to="/list" class="nav-link">내역</router-link>
@@ -18,7 +18,7 @@
                         <router-link to="/calendar" class="nav-link">달력</router-link>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#settings">설정</a>
+                        <router-link to="/settings" class="nav-link">설정</router-link>
                     </li>
                 </ul>
             </div>
