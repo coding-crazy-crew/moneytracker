@@ -1,53 +1,161 @@
 <template lang="">
     <div>
-        <form :class="register" @submit.prevent="registFormSubmitHandler">
-            <label for="date" class="form-label">날짜</label>
-            <div class="input-group date">
-                <input
-                    id="date"
-                    type="text"
-                    onfocus="this.select()"
-                    class="form-control bootstrap-datepicker"
-                    value="<%= DateTime.Now.ToString("yyyy-MM-dd")%>" 
-                    placeholder="날짜를 입력하세요."
-                    required
-                    v-model="addressData.first_name"
-                />
-            </div>
-            <div>
-                <label for="last" class="form-label">last-name</label>
-                <input 
-                    type="text" 
-                    class="form-control" 
-                    id="last" 
-                    placeholder="last-name 입력하세요." 
-                    required
-                    v-model="addressData.last_name"
-                />
-                <label for="email" class="form-label">email</label>
-                <input 
-                    type="email" 
-                    class="form-control" 
-                    id="email" 
-                    placeholder="email 입력하세요." 
-                    required
-                    v-model="addressData.email"
-                />
-                <label for="Gender" class="form-label">Gender</label>
-                <select class="form-select" v-model="addressData.gender">
-                    <option>Unknown</option>
-                    <option>Male</option>
-                    <option>Female</option>
-                </select>
-            </div>
-        </form>
+        <div class="main-content">
+            <form :class="register" @submit.prevent="registFormSubmitHandler">
+                <button 
+                    type="button" 
+                    class="btn btn-success" 
+                    :class="{active: tradeHistoryData.type === '수입'}" 
+                    @click="setTradeType('수입')">수입</button>
+                <button 
+                    type="button" 
+                    class="btn btn-success" 
+                    :class="{active: tradeHistoryData.type === '지출'}" 
+                    @click="setTradeType('지출')">지출</button>
+
+                <br>
+                <div class="mb-3 mt-3" style="text-align: -webkit-center;">
+                    <div class="input-list">
+                        <label for="date" class="form-label">날짜</label>
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="date"
+                            placeholder="날짜를 입력하세요.(ex. 월/일/년)"
+                            required
+                            v-model="tradeHistoryData.date"
+                        />
+                        <label for="amount" class="form-label">금액</label>
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="amount" 
+                            placeholder="금액을 입력하세요." 
+                            required
+                            v-model="tradeHistoryData.amount"
+                        />
+                        <label for="category" class="form-label">분류</label>
+                        <select class="form-select" v-model="tradeHistoryData.category">
+                            <option>식비</option>
+                            <option>교통/차량</option>
+                            <option>문화생활</option>
+                            <option>마트/편의점</option>
+                            <option>패션/미용</option>
+                            <option>생활용품</option>
+                            <option>주거/통신</option>
+                            <option>건강</option>
+                            <option>교육</option>
+                            <option>경조사/회비</option>
+                            <option>부모님</option>
+                            <option>기타</option>
+                        </select>
+                        <label for="asset" class="form-label">자산</label>
+                        <select class="form-select" v-model="tradeHistoryData.asset">
+                            <option>현금</option>
+                            <option>은행</option>
+                            <option>카드</option>
+                        </select>
+                        <label for="content" class="form-label">내용</label>
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="content" 
+                            placeholder="내용을 입력하세요.." 
+                            required
+                            v-model="tradeHistoryData.content"
+                        />
+                    </div>
+                </div>
+                <div class="bottom-button">
+                    <button type="submit" class="btn btn-success">저장</button>
+                    <button type="button" class="btn btn-success" @click="registMoreEvent">계속</button>
+                </div>
+            </form>
+        </div>
     </div>
 </template>
 <script>
+import {reactive} from 'vue'
+import axios from 'axios'
+import {useRouter} from 'vue-router'
+
 export default {
-    
+    name: 'Register',
+    setup() {
+        const tradeHistoryData = reactive({
+            id: Date.now(),
+            type: '',
+            date: '',
+            amount: '',
+            category: '',
+            asset: '',
+            content: '',
+        })
+        const router = useRouter()
+        const registFormSubmitHandler = async (e) => {
+            const url = `http://localhost:3000/data`
+            const data = tradeHistoryData
+            console.log(data)
+            const dataJson = JSON.stringify(data)
+            console.log(dataJson)
+            try{
+                const response = await axios.post(url, dataJson, {"Content-Type":"application/json"})
+                router.go(-1) // 새로 고침이 아니라 이전 페이지로 이동
+            } catch(err) {
+                console.log(err)
+                // router.push("/")
+            }
+        }
+
+
+        const registMoreEvent = async (e) => {
+            const url = `http://localhost:3000/data`
+            const data = tradeHistoryData
+            const dataJson = JSON.stringify(data)
+            try{
+                const response = await axios.post(url, dataJson, {"Content-Type":"application/json"})
+                location.reload();
+            } catch(err) {
+                alert(err.response.data)
+            }
+        }
+        
+        const setTradeType = (type) => {
+            tradeHistoryData.type = type;
+        }
+
+        setTradeType('수입');
+
+        return {tradeHistoryData, registFormSubmitHandler, registMoreEvent, setTradeType}
+    }
 }
 </script>
-<style lang="">
+<style scoped>
+    div {
+        background-color : #D8EFD3;
+        margin: 0;
+        padding: 0;
+    }
     
+    .main-content {
+        background-color: #D8EFD3;
+        margin: 0 auto;
+        padding: 20px;
+        max-width: 1200px;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .input-list {
+        width: 60%;
+        text-align: left;
+    }
+
+    .btn-success {
+        margin-right: 10px;
+    }
+
+    .bottom-button {
+        justify-content: space-between;
+    }
 </style>
