@@ -1,14 +1,14 @@
 <template>
-  <div class="modal-overlay" @click.self="close">
+  <div class="modal-overlay" @click.self="closeModal">
     <div class="modal-content">
-      <button class="close-button" @click="close">X</button>
-      <h2>이벤트 정보</h2>
+      <button class="close-button" @click="closeModal">X</button>
+      <h4>Money Tracker</h4>
       <ul>
         <li v-for="(event, index) in events" :key="index">
-          <p>타입: {{ event.type === "income" ? "수입" : "지출" }}</p>
-          <p>금액: {{ event.amount.toLocaleString() }}</p>
           <p>날짜: {{ event.date }}</p>
-          <p>카테고리: {{ event.category }}</p>
+          <p>소비유형: {{ event.type === "income" ? "수입" : "지출" }}</p>
+          <p>금액: {{ event.amount.toLocaleString() }}</p>
+          <p>분류: {{ event.category }}</p>
         </li>
       </ul>
     </div>
@@ -16,22 +16,40 @@
 </template>
 
 <script>
-export default {
+import { defineComponent, toRefs } from "vue";
+
+export default defineComponent({
+  name: "CalendarModal",
   props: {
     events: {
       type: Array,
       required: true,
     },
   },
-  methods: {
-    close() {
-      this.$emit("close");
-    },
+  setup(props, { emit }) {
+    const { events } = toRefs(props);
+
+    const closeModal = () => {
+      emit("close");
+    };
+
+    return {
+      events,
+      closeModal,
+    };
   },
-};
+});
 </script>
 
 <style scoped>
+h4 {
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 4px 4px 10px rgba(0, 0, 0, 1);
+  margin: 0;
+}
 .modal-overlay {
   position: fixed;
   top: 0;
