@@ -109,10 +109,12 @@ export default {
             }
         }
 
-        //itemClickHandler : 수정 삭제 컴포넌트 visible 관리
+        //itemClickHandler : 수정 삭제 컴포넌트 visible 관리, props 관리
         const itemClickHandler = (event)=>{
-            console.log(event.currentTarget.getAttribute('class').split(' ')[1])
-            //컴포넌트 props 설정필요
+            const clickedId = event.currentTarget.getAttribute('class').split(' ')[1]
+            //객체 id가 clickedId 인 객체 찾기
+            const clickedObj = lists[clickedId-1]
+            console.log(clickedObj)
         }
         return {currentDate,nextMonthList,previousMonthList,filteredItems,filteredType, itemClickHandler}
     }
