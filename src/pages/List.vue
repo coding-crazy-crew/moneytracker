@@ -1,39 +1,44 @@
 <template lang="">
-    <div>
-        <div>
-            <select class="form-select" v-model="filteredType">
-                    <option value="all" selected>전체</option>
-                    <option value="수입">수입</option>
-                    <option value="지출">지출</option>
-                </select>
-        </div>
-        <div>
-            <a href="#" class="previous round" @click="previousMonthList">&#8249;</a>
-            {{currentDate.year}}-{{currentDate.month}}
-            <a href="#" class="`next round" @click="nextMonthList">&#8250;</a></div>
-        <div>
-            <table border="1">
-                <thead>
-                    <tr>
-                        <td>날짜</td>
-                        <td>금액</td>
-                        <td>유형</td>
-                        <td>분류</td>
-                        <td>카테고리</td>
-                        <!-- <td>내용</td> -->
-                    </tr>
-                </thead>
-                <tbody >
-                    <tr v-for="i in filteredItems" :key="i.id" :class="`tr ${i.id}`" @click="itemClickHandler" >
-                        <td>{{i.date}}</td>
-                        <td>{{i.amount}}</td>
-                        <td>{{i.asset}}</td>
-                        <td>{{i.type}}</td>
-                        <td>{{i.category}}</td>
-                        <!-- <td>{{i.content}}</td> -->
-                    </tr>
-                </tbody>
-            </table>
+        <div class = "outer">
+    <div class="main-content">
+            <div class="grid-container">
+                <div class="grid-item item1">
+                    <select class="form-select" v-model="filteredType">
+                            <option value="all" selected>전체</option>
+                            <option value="수입">수입</option>
+                            <option value="지출">지출</option>
+                        </select>
+                </div>
+                <div class="grid-item item2">
+                    <a href="#" class="previous round" @click="previousMonthList">&#8249;</a>
+                    {{currentDate.year}}-{{currentDate.month}}
+                    <a href="#" class="next round" @click="nextMonthList">&#8250;</a>
+                </div>
+            </div>
+            <div class="tableWrapper">
+                <table class="tb">
+                    <thead class="tb-thead">
+                        <tr class="thead-tr">
+                            <td width=14%>날짜</td>
+                            <td width=14%>금액</td>
+                            <td width=14%>유형</td>
+                            <td width=14%>분류</td>
+                            <td width=14%>카테고리</td>
+                            <td width=30%>내용</td>
+                        </tr>
+                    </thead>
+                    <tbody class="tb-tbody">
+                        <tr v-for="i in filteredItems" :key="i.id" :class="`tr ${i.id}`" @click="itemClickHandler" >
+                            <td>{{i.date}}</td>
+                            <td>{{i.amount}}</td>
+                            <td><span class="type">{{i.type}}</span></td>
+                            <td>{{i.asset}}</td>
+                            <td>{{i.category}}</td>
+                            <td>{{i.content}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </template>
@@ -61,7 +66,7 @@ export default {
         const getCurrentMonthList = async()=>{
             const response = await axios.get('http://localhost:3000/data')
             response.data.map((item)=>{
-                item.type = item.type=== 'expense' ? '지출' : '수입'
+                item.type = item.type=== 'expenses' ? '지출' : '수입'
                 item.date= formatDate(item.date)})
             Object.assign(lists,response.data)
         }
@@ -78,7 +83,8 @@ export default {
         // filteredItems : Filter 항목을 적용하여 list 반환
         const filteredItems = computed(() => {
             let dateFiltered = lists.filter(item => item.date.substr(0,7)  === `${currentDate.year}-${currentDate.month}`)
-            return filteredType.value ==='all' ? dateFiltered : dateFiltered.filter(item =>item.type === filteredType.value)
+            let typeFiltered = filteredType.value ==='all' ? dateFiltered : dateFiltered.filter(item =>item.type === filteredType.value)
+            return typeFiltered
         });
 
         // nextMonthList : 다음 월의 내역 가지고오기
@@ -103,12 +109,93 @@ export default {
 
         const itemClickHandler = (event)=>{
             console.log(event.currentTarget.getAttribute('class').split(' ')[1])
-            
         }
         return {currentDate,nextMonthList,previousMonthList,filteredItems,filteredType, itemClickHandler}
     }
 }
 </script>
-<style lang="">
+<style scoped>
+    /* layout style */
+    .outer{
+        background-color: #D8EFD3;
+        border :2vh solid #D8EFD3;
+        min-height:98vh;
+        height: max-content;
+    }
+    .main-content {
+        background-color: #D8EFD3;
+        margin: 10px auto;
+        padding: 20px;
+        width: 80%;
+        max-width: 1200px;
+        border-radius: 8px;
+    }
+
+    .grid-container{
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+        justify-content : space-between;
+        margin-bottom : 2vh;
+    }
+    .grid-container > .item2{
+        background-color: white;
+        justify-self: end;
+        padding : 4px 10px;
+        border-radius: 20px;
+    }
+    /* table style */
     
+    .tb {
+        /* padding:0.5em; */
+        border-collapse: separate;
+        border-radius: 2em 2em 0 0;
+        border : 0.1px solid #55AD98;
+        background-color: #55AD98;
+    }
+    .tb-thead{
+        /* background-color: #55AD9B; */
+        font-size: large;
+        text-align: center;
+        color: #F1F8E8;
+        height: 3em;
+        padding: 2em;
+    } 
+    .tb-tbody{
+        background-color: #F1F8E8;
+        text-align: center;
+        border : 1px solid black
+    } 
+    
+    .type{
+        background-color:#D8EFD3;
+        padding: 10px 15px;
+        border-radius: 10px;
+        border : 1px solid #D8EFD3;
+    }
+
+    
+    /* button style */
+    .form-select{
+        max-width:40%;
+    }
+    a {
+        text-decoration: none;
+        display: inline-block;
+        padding: 0.2em 0.6em;
+    }
+    a:hover {
+        background-color: #ddd;
+        color: black;
+    }
+    .previous, .next {
+        background-color: #F1F8E8;
+        color: black;
+        font-size: 1.1em;
+    }
+    .round {
+        border-radius: 50%;
+        }  
+
+
+
 </style>
