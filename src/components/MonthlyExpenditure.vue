@@ -1,47 +1,45 @@
 <template>
     <div>
-        <div class="main-content">
-            <div class="month-bar">
-                <button @click="prevMonth" class="btn-icon"><i class="bi bi-caret-left-fill"></i></button>
-                <span class="currentMonth">{{ formattedDate }}</span>
-                <button @click="nextMonth" class="btn-icon"><i class="bi bi-caret-right-fill"></i></button>
-            </div>
+        <div class="month-bar">
+            <button @click="prevMonth" class="btn-icon"><i class="bi bi-caret-left-fill"></i></button>
+            <span class="currentMonth">{{ formattedDate }}</span>
+            <button @click="nextMonth" class="btn-icon"><i class="bi bi-caret-right-fill"></i></button>
+        </div>
+        <hr>
+        <div class="monthly-expenses">
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th scope="col">수입</th>
+                        <th scope="col">지출</th>
+                        <th scope="col">순이익</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="cell-content">{{ totalIncome.toLocaleString() }}원</div>
+                        </td>
+                        <td>
+                            <div class="cell-content">{{ totalExpenses.toLocaleString() }}원</div>
+                        </td>
+                        <td>
+                            <div class="cell-content">{{ profit.toLocaleString() }}원</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
             <hr>
-            <div class="monthly-expenses">
-                <table class="summary-table">
-                    <thead>
-                        <tr>
-                            <th scope="col">수입</th>
-                            <th scope="col">지출</th>
-                            <th scope="col">순이익</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div class="cell-content">{{ totalIncome.toLocaleString() }}원</div>
-                            </td>
-                            <td>
-                                <div class="cell-content">{{ totalExpenses.toLocaleString() }}원</div>
-                            </td>
-                            <td>
-                                <div class="cell-content">{{ profit.toLocaleString() }}원</div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <br>
-                <hr>
-                <CategoryPieChart :records="monthlyRecords" />
-            </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, defineEmits } from 'vue'
 import axios from "axios"
-import CategoryPieChart from './CategoryPieChart.vue'
+
+const emit = defineEmits(['updateRecords'])
 
 const totalIncome = ref(0)
 const totalExpenses = ref(0)
@@ -86,6 +84,8 @@ const filterMonthRecord = () => {
     })
 
     filterIncomeAndExpenses()
+
+    emit('updateRecords', monthlyRecords.value)
 }
 
 const filterIncomeAndExpenses = () => {
@@ -128,21 +128,11 @@ watch(currentDate, filterMonthRecord)
     color: black;
     font-size: 18px;
     cursor: pointer;
-    transition: color 0.3s;
 }
 
 .currentMonth {
     font-size: 18px;
     font-weight: bold;
-}
-
-.main-content {
-    background-color: #D8EFD3;
-    margin: 20px auto;
-    padding: 20px;
-    width: 80%;
-    max-width: 1200px;
-    border-radius: 8px;
 }
 
 .monthly-expenses {
@@ -186,20 +176,5 @@ watch(currentDate, filterMonthRecord)
 
 .summary-table thead {
     border-bottom: 2px solid #55AD9B;
-}
-
-.pie-chart {
-    margin-top: 20px;
-    text-align: center;
-}
-
-.chart-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 400px;
-    /* 차트의 높이를 지정합니다. 필요에 따라 조정 가능합니다. */
-    width: 100%;
-    /* 컨테이너의 너비를 설정 */
 }
 </style>
