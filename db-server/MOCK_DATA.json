@@ -1,3 +1,4 @@
+
 {"data" : [
     {"id":1,"type":"expenses","date":"1/30/2024","amount":87800735,"category":"문화생활","asset":"현금","content":"Sed ante. Vivamus tortor. Duis mattis egestas metus.\n\nAenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh."},
 {"id":2,"type":"expenses","date":"2/22/2024","amount":33537955,"category":"패션/미용","asset":"우리은행","content":"Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.\n\nCurabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est."},
