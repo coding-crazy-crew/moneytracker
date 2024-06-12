@@ -18,108 +18,97 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td><div class="cell-content">{{ totalIncome.toLocaleString() }}원</div></td>
-                            <td><div class="cell-content">{{ totalExpenses.toLocaleString() }}원</div></td>
-                            <td><div class="cell-content">{{ profit.toLocaleString() }}원</div></td>
+                            <td>
+                                <div class="cell-content">{{ totalIncome.toLocaleString() }}원</div>
+                            </td>
+                            <td>
+                                <div class="cell-content">{{ totalExpenses.toLocaleString() }}원</div>
+                            </td>
+                            <td>
+                                <div class="cell-content">{{ profit.toLocaleString() }}원</div>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
                 <br>
                 <hr>
-                <div class="pie-chart">
-                </div>
+                <CategoryPieChart :records="monthlyRecords" />
             </div>
         </div>
     </div>
 </template>
 
-<script>
-import { ref, computed, onMounted, watch } from 'vue';
-import axios from "axios";
+<script setup lang="ts">
+import { ref, computed, onMounted, watch } from 'vue'
+import axios from "axios"
+import CategoryPieChart from './CategoryPieChart.vue'
 
-export default {
-    setup() {
+const totalIncome = ref(0)
+const totalExpenses = ref(0)
+const currentDate = ref(new Date())
 
-        const totalIncome = ref(0);
-        const totalExpenses = ref(0);
-        const currentDate = ref(new Date());
+const formattedDate = computed(() => {
+    return `${currentDate.value.getFullYear()}년 ${currentDate.value.getMonth() + 1}월`
+})
 
-        const formattedDate = computed(() => {
-            return `${currentDate.value.getFullYear()}년 ${currentDate.value.getMonth() + 1}월`;
-        });
+const prevMonth = () => {
+    const date = new Date(currentDate.value)
+    date.setMonth(date.getMonth() - 1)
+    currentDate.value = date
+}
 
-        const prevMonth = () => {
-            const date = new Date(currentDate.value);
-            date.setMonth(date.getMonth() - 1);
-            currentDate.value = date;
-        };
+const nextMonth = () => {
+    const date = new Date(currentDate.value)
+    date.setMonth(date.getMonth() + 1)
+    currentDate.value = date
+}
 
-        const nextMonth = () => {
-            const date = new Date(currentDate.value);
-            date.setMonth(date.getMonth() + 1);
-            currentDate.value = date;
-        };
+const recordList = ref([])
+const monthlyRecords = ref([])
 
-        const recordList = ref([]);
-        const monthlyRecords = ref([]);
+const getMonthRecords = async () => {
+    const url = "http://localhost:3000/data"
+    axios.get(url).then(response => {
+        recordList.value = response.data
+        filterMonthRecord()
+    })
+}
 
-        const getMonthRecords = async () => {
-            const url = "http://localhost:3000/data";
-            axios.get(url).then(response => {
-                recordList.value = response.data;
-            });
-        };
+const filterMonthRecord = () => {
+    const year = currentDate.value.getFullYear()
+    const month = currentDate.value.getMonth() + 1
+    monthlyRecords.value = recordList.value.filter((record) => {
+        const recordDate = new Date(record.date)
+        return (
+            recordDate.getFullYear() === year &&
+            recordDate.getMonth() + 1 === month
+        )
+    })
 
-        const filterMonthRecord = () => {
-            const year = currentDate.value.getFullYear();
-            const month = currentDate.value.getMonth() + 1;
-            monthlyRecords.value = recordList.value.filter((record) => {
-                const recordDate = new Date(record.date);
-                console.log(record.date);
-                return (
-                    recordDate.getFullYear() === year &&
-                    recordDate.getMonth() + 1 === month
-                );
-            });
+    filterIncomeAndExpenses()
+}
 
-            filterIncomeAndExpenses();
-        };
+const filterIncomeAndExpenses = () => {
+    totalIncome.value = 0
+    totalExpenses.value = 0
+    monthlyRecords.value.forEach((record) => {
+        if (record.type === "income") {
+            totalIncome.value += record.amount
+        } else {
+            totalExpenses.value += record.amount
+        }
+    })
+}
 
-        const filterIncomeAndExpenses = () => {
-            monthlyRecords.value.forEach((record) => {
-                console.log(record.type);
-                if (record.type === "income") {
-                    totalIncome.value += record.amount;
-                } else {
-                    totalExpenses.value += record.amount;
-                }
-            });
-        };
+const profit = computed(() => {
+    return totalIncome.value - totalExpenses.value
+})
 
-        onMounted(() => {
-            getMonthRecords();
-        });
+onMounted(async () => {
+    await getMonthRecords()
+})
 
-        const profit = computed(() => {
-            return totalIncome.value - totalExpenses.value;
-        });
-
-        watch(currentDate, filterMonthRecord);
-
-        return {
-            currentDate,
-            formattedDate,
-            prevMonth,
-            nextMonth,
-            recordList,
-            monthlyRecords,
-            profit,
-            totalExpenses,
-            totalIncome,
-            filterIncomeAndExpenses
-        };
-    }
-};
+watch(currentDate, filterMonthRecord)
 </script>
 
 <style scoped>
@@ -168,7 +157,6 @@ export default {
     background-color: #F1F8E8;
     width: 100%;
     text-align: center;
-    position: sticky;
     border-collapse: collapse;
     margin-bottom: 20px;
 }
@@ -177,27 +165,41 @@ export default {
 .summary-table td {
     padding: 12px 15px;
     text-align: center;
+    vertical-align: middle;
+    width: 33%;
 }
 
 .summary-table td {
     padding: 0;
-    text-align: center;
-    vertical-align: middle;
 }
 
 .cell-content {
     background-color: #ffffff;
-    border-radius: 30px;
+    border-radius: 12px;
     border: 1px solid #e0e0e0;
     padding: 10px;
-    margin: 10px;
     width: 90%;
-    text-align: center;
+    margin: 10px auto;
     box-sizing: border-box;
-    font-weight: bold;
+    text-align: center;
 }
 
 .summary-table thead {
     border-bottom: 2px solid #55AD9B;
+}
+
+.pie-chart {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 400px;
+    /* 차트의 높이를 지정합니다. 필요에 따라 조정 가능합니다. */
+    width: 100%;
+    /* 컨테이너의 너비를 설정 */
 }
 </style>
