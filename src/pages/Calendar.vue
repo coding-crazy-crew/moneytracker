@@ -1,101 +1,187 @@
 <template>
   <div class="outer">
     <div class="tab">
-      <div class="summary">
-        <CalendarSummary :currentMonthSummary="currentMonthSummary" />
-      </div>
       <Tab @tab-selected="filterEvents" />
     </div>
-    <div class="calendar">
-      <FullCalendar :options="calendarOptions" @datesSet="updateCurrentMonth" />
+    <div
+      class="totals"
+      v-if="currentMonthTotal.income || currentMonthTotal.expenses"
+    >
+      <h3>{{ currentMonth }}</h3>
+      <p>이번달 총 수입: {{ currentMonthTotal.income.toLocaleString() }} 원</p>
+      <p>
+        이번달 총 지출: {{ currentMonthTotal.expenses.toLocaleString() }} 원
+      </p>
+      <p class="p3" v-if="currentMonthTotal.netIncome >= 0">
+        순이익: {{ currentMonthTotal.netIncome.toLocaleString() }} 원
+      </p>
+      <p class="p3" v-else>
+        이번달은 {{ currentMonthTotal.netIncome.toLocaleString() }} 원으로
+        순이익이 없어요, <br />재정관리에 힘쓰세요!
+      </p>
     </div>
-    <ToRegisterButton/>
+    <div class="calendar">
+      <FullCalendar :options="calendarOptions" @datesSet="handleDatesSet" />
+    </div>
+    <CalendarModal
+      v-if="showModal"
+      @close="showModal = false"
+      :events="selectedEvents"
+    />
   </div>
 </template>
 
 <script>
-import ToRegisterButton from "@/components/ToRegisterButton.vue"
 import Tab from "@/components/Tab.vue";
+import CalendarModal from "@/components/CalendarModal.vue";
 import { ref, onMounted, reactive, watch } from "vue";
 import FullCalendar from "@fullcalendar/vue3";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import axios from "axios";
-import CalendarSummary from "@/components/CalendarSummary.vue"
 
 export default {
-  name: "CalendarView", // 컴포넌트 이름 변경
+  name: "calendar",
   components: {
     FullCalendar,
     Tab,
-    CalendarSummary,
+    CalendarModal,
   },
   setup() {
     const calendarOptions = reactive({
       plugins: [dayGridPlugin, interactionPlugin],
       initialView: "dayGridMonth",
-      dateClick: dateClickHandler,
+      dateClick: (info) => dateClickHandler(info),
       events: [],
-      locale: "ko", // 한국어로 설정
-      prev:'chevron-left',
-      next:'chevron-right'
-    })
+      locale: "ko",
+    });
 
     const allEvents = ref([]);
-    const monthlySummary = ref({}); // 월별 수입 및 지출을 저장할 객체
-    const currentMonth = ref(new Date().toISOString().substring(0, 7));
-    const currentMonthSummary = ref({ income: 0, expenses: 0 });
+    const monthlyTotals = ref({});
+    const currentMonth = ref("");
+    const currentMonthTotal = ref({ income: 0, expenses: 0, netIncome: 0 });
+    const filterType = ref("all");
+    const showModal = ref(false);
+    const selectedEvents = ref([]);
 
     onMounted(() => {
       requestList();
+    });
+
+    watch(filterType, () => {
+      updateCalendarEvents();
+      updateCurrentMonthTotal();
     });
 
     const requestList = async () => {
       try {
         const response = await axios.get("http://localhost:3000/data");
         const events = response.data.map((event) => ({
-          title: `${event.amount.toLocaleString()} ${event.type === "income" ? "(+)" : "(-)"}`,
+          title: `${event.amount.toLocaleString()} ${
+            event.type === "income" ? "(+)" : "(-)"
+          }`,
           start: formatDate(event.date),
           type: event.type,
-          amount: event.amount,
           textColor: event.type === "income" ? "#55AD9B" : "black",
           borderColor: "#F1F8E8",
           backgroundColor: "#F1F8E8",
+          ...event, // 모든 데이터를 포함하도록 확장
         }));
-
         allEvents.value = events;
-        calendarOptions.events = events;
-        calculateMonthlySummary(events); // 월별 요약 업데이트
-        updateCurrentMonthSummary();
+        calculateMonthlyTotals(events);
+        updateCalendarEvents();
       } catch (error) {
         console.error("Error fetching events:", error);
       }
     };
 
-    const calculateMonthlySummary = (events) => {
-      const summary = {};
+    const calculateMonthlyTotals = (events) => {
+      const totals = {};
       events.forEach((event) => {
-        const date = new Date(event.start);
-        const month = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
-        if (!summary[month]) {
-          summary[month] = { income: 0, expenses: 0 };
+        const eventDate = new Date(event.start);
+        const monthKey = `${eventDate.getFullYear()}-${String(
+          eventDate.getMonth() + 1
+        ).padStart(2, "0")}`;
+        if (!totals[monthKey]) {
+          totals[monthKey] = { income: 0, expenses: 0, netIncome: 0 };
         }
+        const amount = parseFloat(event.title.split(" ")[0].replace(/,/g, ""));
         if (event.type === "income") {
-          summary[month].income += event.amount;
+          totals[monthKey].income += amount;
         } else {
-          summary[month].expenses += event.amount;
+          totals[monthKey].expenses += amount;
         }
+        totals[monthKey].netIncome =
+          totals[monthKey].income - totals[monthKey].expenses;
       });
-      monthlySummary.value = summary;
+      monthlyTotals.value = totals;
+    };
+
+    const updateCalendarEvents = () => {
+      if (filterType.value === "all") {
+        calendarOptions.events = allEvents.value;
+      } else {
+        calendarOptions.events = allEvents.value.filter(
+          (event) => event.type === filterType.value
+        );
+      }
+      // 현재 보이는 날짜 범위를 기준으로 계산
+      const calendarApi = document
+        .querySelector(".fc")
+        ?.__vueParentComponent.ctx.getApi();
+      if (calendarApi) {
+        const start = new Date(calendarApi.view.currentStart);
+        const end = new Date(calendarApi.view.currentEnd);
+        currentMonthTotal.value = calculateMonthlyTotal(start, end);
+      }
+    };
+
+    const updateCurrentMonthTotal = () => {
+      // 현재 보이는 달의 총합계를 업데이트
+      const calendarApi = document
+        .querySelector(".fc")
+        ?.__vueParentComponent.ctx.getApi();
+      if (calendarApi) {
+        const start = new Date(calendarApi.view.currentStart);
+        const end = new Date(calendarApi.view.currentEnd);
+        currentMonthTotal.value = calculateMonthlyTotal(start, end);
+      }
+    };
+
+    const calculateMonthlyTotal = (start, end) => {
+      const totals = { income: 0, expenses: 0, netIncome: 0 };
+      const monthKey = `${start.getFullYear()}-${String(
+        start.getMonth() + 1
+      ).padStart(2, "0")}`;
+      if (monthlyTotals.value[monthKey]) {
+        totals.income = monthlyTotals.value[monthKey].income;
+        totals.expenses = monthlyTotals.value[monthKey].expenses;
+        totals.netIncome = monthlyTotals.value[monthKey].netIncome;
+      }
+      return totals;
+    };
+
+    const handleDatesSet = (info) => {
+      const start = new Date(info.start);
+      const end = new Date(info.end);
+      currentMonth.value = `${start.getFullYear()}-${String(
+        start.getMonth() + 1
+      ).padStart(2, "0")}`;
+      currentMonthTotal.value = calculateMonthlyTotal(start, end);
+    };
+
+    const dateClickHandler = (info) => {
+      const clickedDate = formatDate(info.date);
+      selectedEvents.value = allEvents.value.filter(
+        (event) => event.start === clickedDate
+      );
+      showModal.value = true;
     };
 
     const filterEvents = (type) => {
-      if (type === "all") {
-        calendarOptions.events = allEvents.value;
-      } else {
-        calendarOptions.events = allEvents.value.filter((event) => event.type === type);
-      }
-      updateCurrentMonthSummary();
+      filterType.value = type;
+      updateCalendarEvents();
+      updateCurrentMonthTotal(); // 탭 변경 시 현재 월 총합계 업데이트
     };
 
     const formatDate = (date) => {
@@ -106,27 +192,15 @@ export default {
       return `${year}-${month}-${day}`;
     };
 
-    const updateCurrentMonth = (arg) => {
-      const startDate = new Date(arg.start);
-      const month = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, "0")}`;
-      currentMonth.value = month;
-      updateCurrentMonthSummary();
-    };
-
-    const updateCurrentMonthSummary = () => {
-      currentMonthSummary.value = monthlySummary.value[currentMonth.value] || { income: 0, expenses: 0 };
-    };
-
-    function dateClickHandler(arg) {
-      axios.get("http/localhost:3000/data")
-      
-      alert("수정 필요 " + arg.dateStr);
-    }
-
     return {
       calendarOptions,
       filterEvents,
-      currentMonthSummary,
+      handleDatesSet,
+      dateClickHandler,
+      currentMonth,
+      currentMonthTotal,
+      showModal,
+      selectedEvents,
     };
   },
 };
@@ -151,14 +225,28 @@ export default {
   border-radius: 8px;
   background-color: #f1f8e8;
 }
+.totals {
+  margin: 20px auto;
+  padding: 20px;
+  width: 80%;
+  max-width: 1200px;
+  background-color: #f1f8e8;
+  border-radius: 8px;
+}
+
+p {
+  font-size: 20px;
+  text-align: cet;
+}
+.p3 {
+  color: red;
+  text-align: center;
+}
 
 /* 날짜 번호 색상을 검은색으로 설정 */
 :deep(.fc-daygrid-day-number),
 :deep(.fc-col-header-cell-cushion) {
   color: black;
   text-decoration: none;
-}
-:deep(.fc-prev-button), :deep(.fc-next-button), :deep(.fc-today-button) {
-  background-color: #95D2B3;
 }
 </style>

@@ -1,5 +1,4 @@
 <template>
-  <!-- Tab -->
   <div class="wrap">
     <div class="tab">
       <button
@@ -61,7 +60,7 @@ button:hover {
 button.active {
   background-color: #95d2b3;
 }
-button:focus{
+button:focus {
   background-color: #95d2b3;
 }
 </style>
