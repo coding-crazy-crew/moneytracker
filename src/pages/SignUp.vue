@@ -1,0 +1,79 @@
+<template lang="">
+    <form class="signup" @submit.prevent="signupFormSubmitHandler">
+        <label for="i">아이디 : </label>
+        <input type="text" name="id" id="i" required v-model="c.userId"  />
+        <br />
+        <label for="p">비밀번호 :</label>
+        <input type="password" name="pwd" id="p" required v-model="c.pwd" ref="p" />
+        <!-- script영역에서 this.$refs.p로 참조할 수 있다-->
+        <br />
+        <label for="p1">비밀번호1 :</label>
+        <input type="password" id="p1" required v-model="pwd1" />
+        <br />
+
+        <label for="n">이름 :</label>
+        <input type="text" name="name" id="n" required v-model="c.name" />
+        <button type="submit" :class="[isBtSignup ? 'btSignupShow' : 'btSignupHide']"> 가입하기 </button>
+    </form>
+</template>
+<script>
+  // import axios from 'axios'
+    import axios from "axios";
+    import { reactive, ref } from "vue";
+    export default {
+    name: "Signup",
+    setup() {
+        let pwd1 = ref("");
+        let isBtSignup = ref(false); //가입버튼 보여주기 여부
+        let c = reactive({
+        userId: "",
+        pwd: "",
+        name: "",
+        });
+        const profile = ref("");
+        
+    
+        //----폼객체에서 submit이벤트 발생했을때 할 일 START----
+        const p = ref(null); //<input ref="p">
+        const signupFormSubmitHandler = async (e) => {
+            if (c.pwd != pwd1.value) {
+            alert("비밀번호를 다시 입력하세요");
+            const pwdObj = p.value;
+            pwdObj.select();
+            } else {
+            const url = `http://localhost:3000/user`;
+            const data = c;
+            try{
+                const response = await axios.post(url,data,{"Content-Type": "application/json"})
+                console.log(response)
+            }catch(err){
+                alert(err.response.data)
+            }
+            }
+        };
+        return {
+            pwd1,
+            isBtSignup,
+            c,
+            profile,
+            p,
+            signupFormSubmitHandler,
+        };
+        },
+    };
+</script>
+<style scoped>
+/* form.signup>button[type=submit] {
+    display: none;
+} */
+    div.profile {
+    width: 300px;
+    height: 300px;
+    overflow: auto;
+    }
+
+    .btSignupShow {
+    display: block;
+    }
+
+</style>
