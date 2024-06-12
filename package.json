@@ -14,10 +14,6 @@
     "@fullcalendar/daygrid": "^6.1.14",
     "@fullcalendar/interaction": "^6.1.14",
     "@fullcalendar/vue3": "^6.1.14",
-    "axios": "^1.7.2",
-
-    "bootstrap": "^5.3.3",
-
     "@vuepic/vue-datepicker": "^8.8.0",
     "axios": "^1.7.2",
     "bootstrap": "^5.3.3",

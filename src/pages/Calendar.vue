@@ -4,24 +4,29 @@
       <Tab @tab-selected="filterEvents" />
     </div>
     <div class="calendar">
-      <FullCalendar :options="calendarOptions" />
+      <FullCalendar :options="calendarOptions" @datesSet="updateCurrentMonth" />
+    </div>
+    <div class="summary">
+      <CalendarSummary :currentMonthSummary="currentMonthSummary" />
     </div>
   </div>
 </template>
 
 <script>
 import Tab from "@/components/Tab.vue";
-import { ref, onMounted, reactive } from "vue";
+import { ref, onMounted, reactive, watch } from "vue";
 import FullCalendar from "@fullcalendar/vue3";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import axios from "axios";
+import CalendarSummary from "@/components/CalendarSummary.vue";
 
 export default {
-  name: "calendar",
+  name: "Calendar",
   components: {
     FullCalendar,
     Tab,
+    CalendarSummary,
   },
   setup() {
     const calendarOptions = reactive({
@@ -29,9 +34,13 @@ export default {
       initialView: "dayGridMonth",
       dateClick: dateClickHandler,
       events: [],
+      locale:"ko"
     });
 
     const allEvents = ref([]);
+    const monthlySummary = ref({});
+    const currentMonth = ref(new Date().toISOString().substring(0, 7)); // 현재 월
+    const currentMonthSummary = ref({ income: 0, expenses: 0 });
 
     onMounted(() => {
       requestList();
@@ -46,25 +55,45 @@ export default {
           }`,
           start: formatDate(event.date),
           type: event.type,
+          amount: event.amount,
           textColor: event.type === "income" ? "#55AD9B" : "black",
           borderColor: "#F1F8E8",
           backgroundColor: "#F1F8E8",
         }));
+
         allEvents.value = events;
         calendarOptions.events = events; // 초기값은 전체 데이터를 표시
+        calculateMonthlySummary(events);
+        updateCurrentMonthSummary();
       } catch (error) {
         console.error("Error fetching events:", error);
       }
+    };
+
+    const calculateMonthlySummary = (events) => {
+      const summary = {};
+      events.forEach((event) => {
+        const date = new Date(event.start);
+        const month = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+        if (!summary[month]) {
+          summary[month] = { income: 0, expenses: 0 };
+        }
+        if (event.type === "income") {
+          summary[month].income += event.amount;
+        } else {
+          summary[month].expenses += event.amount;
+        }
+      });
+      monthlySummary.value = summary;
     };
 
     const filterEvents = (type) => {
       if (type === "all") {
         calendarOptions.events = allEvents.value;
       } else {
-        calendarOptions.events = allEvents.value.filter(
-          (event) => event.type === type
-        );
+        calendarOptions.events = allEvents.value.filter((event) => event.type === type);
       }
+      updateCurrentMonthSummary();
     };
 
     const formatDate = (date) => {
@@ -75,7 +104,17 @@ export default {
       return `${year}-${month}-${day}`;
     };
 
-    // dateClickHandler: 날짜 클릭 시 drawer 화면 호출
+    const updateCurrentMonth = (arg) => {
+      const startDate = new Date(arg.start);
+      const month = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, "0")}`;
+      currentMonth.value = month;
+      updateCurrentMonthSummary();
+    };
+
+    const updateCurrentMonthSummary = () => {
+      currentMonthSummary.value = monthlySummary.value[currentMonth.value] || { income: 0, expenses: 0 };
+    };
+
     function dateClickHandler(arg) {
       alert("수정 필요 " + arg.dateStr);
     }
@@ -83,6 +122,7 @@ export default {
     return {
       calendarOptions,
       filterEvents,
+      currentMonthSummary,
     };
   },
 };
@@ -113,5 +153,8 @@ export default {
 :deep(.fc-col-header-cell-cushion) {
   color: black;
   text-decoration: none;
+}
+:deep(.fc-prev-button), :deep(.fc-next-button), :deep(.fc-today-button) {
+  background-color: #95D2B3;
 }
 </style>

@@ -23,9 +23,9 @@
                 </ul>
             </div>
         </nav>
-        <div class="main-content">
+        <!-- <div class="main-content">
             본문 내용
-        </div>
+        </div> -->
     </div>
 </template>
 
