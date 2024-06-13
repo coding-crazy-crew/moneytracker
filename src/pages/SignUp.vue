@@ -19,7 +19,7 @@
                         <br />
                         <label for="n">이름 :</label>
                         <input type="text" name="name" id="n" class="form-control" required v-model="c.name" />
-                        <button type="submit" :class="[isBtSignup ? 'btb btn-success btSignupShow' : 'btn btn-success btSignupHide']"> 가입하기 </button>
+                        <button type="submit" :class="[isBtSignup ? 'btn btn-success btSignupShow' : 'btn btn-success btSignupHide']"> 가입하기 </button>
                     </div>
                 </form>
             </div>
@@ -30,6 +30,8 @@
   // import axios from 'axios'
     import axios from "axios";
     import { reactive, ref } from "vue";
+    import { useRouter } from "vue-router";
+    
     export default {
     name: "SignUp",
     setup() {
@@ -42,7 +44,8 @@
         });
         const profile = ref("");
         const isBtSignup = ref(false)
-        const url = `http://localhost:3000/user`;
+        const url = `http://localhost:3000/user`
+        const router = useRouter()
     
 
         const setNextId = (data)=>{
@@ -84,6 +87,8 @@
                 try{
                     const response = await axios.post(url,data,{"Content-Type": "application/json"})
                     console.log(response)
+                    router.push('/settings')
+
                 }catch(err){
                     alert("에러 발생@")
                     alert(err.response.data)
@@ -153,20 +158,26 @@
         font-weight: bold;
     }
 
-/* form.signup>button[type=submit] {
+    form.signup>button[type=submit] {
+     margin-top:10px;
     display: none;
-} */
+} 
+    .btSignupHide{
+        display:none;
+    }
+    .btSignupShow{
+        display:block;
+    }
     div.profile {
     width: 300px;
     height: 300px;
     overflow: auto;
     }
 
-    .btSignupShow {
+    /*.btSignupShow {
     display: block;
     }
-    button[type="submit"]{
-        margin-top:10px;
-    }
+    */
+    
 
 </style>

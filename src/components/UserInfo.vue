@@ -1,11 +1,13 @@
 <template lang="">
     <div class="outer">
-        <h2>유저 정보</h2>
-        <ul>
-            <li>이름 : {{c.name}}</li>
-            <li>아이디 : {{c.userId}}</li>
-        </ul>
-        <button @click="logOut">로그아웃</button>
+        <div class="main-content">
+            <h2>유저 정보</h2>
+            <ul class="list-group">
+                <li class="list-group-item d-flex gap-3 py-3">이름 : {{c.name}}</li>
+                <li class="list-group-item d-flex gap-3 py-3" >아이디 : {{c.userId}}</li>
+            </ul>
+            <button class="btn btn-success" @click="logOut">로그아웃</button>
+        </div>
     </div>
 </template>
 <script>
@@ -48,7 +50,21 @@ export default {
 }
 </script>
 <style scoped>
-    .outer{
-        margin:auto
+    .outer {
+        background-color : #D8EFD3;
+        margin: 0;
+        padding: 0;
+        height: 98vh;
+    }
+    
+    .main-content {
+        height:100vh;
+        background-color: #D8EFD3;
+        margin: 0 auto;
+        padding: 20px;
+        max-width: 60vw;
+        min-width: 30vh;
+        border-radius: 8px;
+        text-align: center;
     }
 </style>

@@ -75,15 +75,18 @@
     </div>
 </template>
 <script>
-import {reactive} from 'vue'
+import {reactive,onMounted} from 'vue'
 import axios from 'axios'
 import {useRouter} from 'vue-router'
+import { useLoginInfoStore } from '@/stores/LoginInfo';
 
 export default {
     name: 'Register',
     setup() {
+        const store = useLoginInfoStore()
         const tradeHistoryData = reactive({
             id: Date.now(),
+            userId: store.getLoginId,
             type: '',
             date: '',
             amount: '',
@@ -92,6 +95,14 @@ export default {
             content: '',
         })
         const router = useRouter()
+
+        onMounted(async() => {
+            if(store.getLoginId ===0){
+                router.push('/settings')
+            }
+        })
+
+
         const registFormSubmitHandler = async (e) => {
             const url = `http://localhost:3000/data`
             const data = tradeHistoryData

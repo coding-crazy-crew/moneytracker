@@ -20,7 +20,9 @@ export const useLoginInfoStore = defineStore("LoginInfo",()=>{
         console.log(id+"로 로그인 성공")
     })
 
-    const getLoginId =computed(()=>userId.value)
+    const getLoginId =computed(()=>{
+        console.log(userId.value + '콘솔')
+        return userId.value})
 
 
     return{logIn,getLoginId,logOut}

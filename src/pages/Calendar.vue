@@ -42,6 +42,8 @@ import FullCalendar from "@fullcalendar/vue3";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import axios from "axios";
+import { useRouter } from "vue-router";
+import { useLoginInfoStore } from "@/stores/LoginInfo";
 
 const calendarOptions = reactive({
   plugins: [dayGridPlugin, interactionPlugin],
@@ -59,7 +61,13 @@ const filterType = ref("all");
 const showModal = ref(false);
 const selectedEvents = ref([]);
 
+const store =useLoginInfoStore()
+const router = useRouter()
+
 onMounted(() => {
+  if(store.getLoginId ===0){
+                router.push('/settings')
+            }
   requestList();
 });
 
@@ -70,7 +78,8 @@ watch(filterType, () => {
 
 const requestList = async () => {
   try {
-    const response = await axios.get("http://localhost:3000/data");
+    const query = "?userId="+store.getLoginId
+    const response = await axios.get("http://localhost:3000/data"+query);
     const events = response.data.map((event) => ({
       title: `${event.amount.toLocaleString()} ${
         event.type === "income" ? "(+)" : "(-)"

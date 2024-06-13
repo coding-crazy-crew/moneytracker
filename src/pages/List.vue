@@ -50,6 +50,8 @@ import axios from 'axios';
 import {computed, onMounted,reactive, ref} from 'vue';
 import RegisterButton from '../components/ToRegisterButton.vue';
 import EditTradeHistory from '../components/EditTradeHistory.vue';
+import { useLoginInfoStore } from '@/stores/LoginInfo';
+import { useRouter } from 'vue-router';
 
 export default {
     name : "List",
@@ -61,8 +63,13 @@ export default {
             year : 2024,
             month : "01"
         })
+        const store =useLoginInfoStore()
+        const router = useRouter()
 
         onMounted(async() => {
+            if(store.getLoginId ===0){
+                router.push('/settings')
+            }
             currentDate.year = new Date().getFullYear()
             currentDate.month = String(new Date().getMonth() + 1).padStart(2,'0')
             window.addEventListener('click', windowClickHandler);
@@ -71,7 +78,9 @@ export default {
         
         // getCurrentMonthList : 기록 내역 가져오기
         const getCurrentMonthList = async()=>{
-            const response = await axios.get('http://localhost:3000/data')
+            const url = 'http://localhost:3000/data'
+            const query = "?userId="+store.getLoginId
+            const response = await axios.get(url+query)
             response.data.map((item)=>{
                 item.type = item.type=== 'expenses' ? '지출' : '수입'
                 item.date= formatDate(item.date)

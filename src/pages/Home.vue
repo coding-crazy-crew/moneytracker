@@ -26,15 +26,22 @@ import MonthlyExpenditure from '@/components/MonthlyExpenditure.vue'
 import CategoryPieChart from '@/components/CategoryPieChart.vue'
 import YearlyProfitBarChart from '@/components/YearlyProfitBarChart.vue'
 import ToRegisterButton from '@/components/ToRegisterButton.vue'
+import { useLoginInfoStore } from '@/stores/LoginInfo'
+import { useRouter } from 'vue-router'
 
 const recordList = ref([])
 const monthlyRecords = ref([])
 
+const store = useLoginInfoStore()
+const router = useRouter()
+
 const getEveryRecords = async () => {
     const url = "http://localhost:3000/data"
+    const query = "?userId="+store.getLoginId
     try {
-        const response = await axios.get(url)
+        const response = await axios.get(url+query)
         recordList.value = response.data
+        console.log(recordList.value)
     } catch (error) {
         console.error('내역 로딩 실패')
     }
@@ -65,6 +72,9 @@ const updateMonthlyRecords = (records) => {
 }
 
 onMounted(() => {
+    if(store.getLoginId ===0){
+        router.push('/settings')
+    }
     getEveryRecords()
 })
 </script>
