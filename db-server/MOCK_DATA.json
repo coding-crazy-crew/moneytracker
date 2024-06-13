@@ -316,21 +316,12 @@
       "content": "Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi."
     },
     {
-      "id": "36",
-      "type": "expenses",
-      "date": "6/9/2024",
-      "amount": 99695285,
-      "category": "문화생활",
-      "asset": "우리은행",
-      "content": "Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum."
-    },
-    {
       "id": "37",
       "type": "income",
       "date": "5/3/2024",
       "amount": 4745460,
       "category": "기타",
-      "asset": "우리은행",
+      "asset": "은행",
       "content": "Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris.\n\nMorbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis."
     },
     {
@@ -861,17 +852,17 @@
       "date": "6/5/2024",
       "amount": 95209334,
       "category": "기타",
-      "asset": "현금",
+      "asset": "은행",
       "content": "Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.\n\nSed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus."
     },
     {
       "id": "97",
       "type": "income",
-      "date": "8/9/2023",
+      "date": "2023-08-09",
       "amount": 71029276,
       "category": "건강",
-      "asset": "국민은행",
-      "content": "Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat."
+      "asset": "카드",
+      "content": "Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commod ..."
     },
     {
       "id": "98",
@@ -901,85 +892,94 @@
       "content": "In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo."
     },
     {
-      "id": 1718237825031,
-      "type": "income",
-      "date": "",
-      "amount": "",
-      "category": "",
-      "asset": "",
-      "content": ""
+      "id": "101",
+      "type": "expenses",
+      "date": "2024-06-11",
+      "amount": 1000000,
+      "category": "주거/통신",
+      "asset": "현금",
+      "content": "히히히"
     },
     {
-      "id": 1718237893675,
+      "id": "102",
       "type": "income",
-      "date": "",
-      "amount": "",
-      "category": "",
-      "asset": "",
-      "content": ""
+      "date": "2023-06-11",
+      "amount": 1000000,
+      "category": "문화생활",
+      "asset": "카드",
+      "content": "히히히"
     },
     {
-      "id": 1718237894608,
+      "id": "103",
       "type": "income",
-      "date": "",
-      "amount": "",
-      "category": "",
-      "asset": "",
-      "content": ""
+      "date": "6/11/2024",
+      "amount": 1000000,
+      "category": "마트/편의점",
+      "asset": "은행",
+      "content": "히히히"
     },
     {
-      "id": 1718237903284,
-      "type": "income",
-      "date": "",
-      "amount": "",
-      "category": "",
-      "asset": "",
-      "content": ""
+      "id": "104",
+      "type": "expenses",
+      "date": "6/12/2024",
+      "amount": 100000000,
+      "category": "마트/편의점",
+      "asset": "은행",
+      "content": "히히히"
     },
     {
-      "id": 1718237916645,
+      "id": "105",
       "type": "income",
-      "date": "",
-      "amount": "",
-      "category": "",
-      "asset": "",
-      "content": ""
+      "date": "6/11/2024",
+      "amount": 2000000,
+      "category": "교통/차량",
+      "asset": "현금",
+      "content": "히히히"
     },
     {
-      "id": 1718237917121,
-      "type": "income",
-      "date": "",
-      "amount": "",
-      "category": "",
-      "asset": "",
-      "content": ""
+      "id": "107",
+      "type": "expenses",
+      "date": "2024-06-13",
+      "amount": 1000000,
+      "category": "식비",
+      "asset": "은행",
+      "content": "히히히"
     },
     {
-      "id": 1718237918177,
-      "type": "income",
-      "date": "",
-      "amount": "",
-      "category": "",
-      "asset": "",
-      "content": ""
+      "id": 1718244878239,
+      "type": "expenses",
+      "date": "6/11/2023",
+      "amount": "2000000",
+      "category": "생활용품",
+      "asset": "현금",
+      "content": "Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris.Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis."
     },
     {
-      "id": 1718237918781,
+      "id": "1718244878240",
       "type": "income",
-      "date": "",
-      "amount": "",
-      "category": "",
-      "asset": "",
-      "content": ""
+      "date": "6/11/2024",
+      "amount": 2000000,
+      "category": "패션/미용",
+      "asset": "은행",
+      "content": "히히히"
     },
     {
-      "id": 1718237919169,
+      "id": "1718244878241",
       "type": "income",
-      "date": "",
-      "amount": "",
-      "category": "",
-      "asset": "",
-      "content": ""
+      "date": "6/11/2023",
+      "amount": 2000000,
+      "category": "마트/편의점",
+      "asset": "카드",
+      "content": "Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris.Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis."
+    },
+    {
+      "id": "1718244878242",
+      "type": "expenses",
+      "date": "6/11/2024",
+      "amount": 2000000,
+      "category": "마트/편의점",
+      "asset": "은행",
+      "content": "Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris.Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis."
     }
   ]
 }
