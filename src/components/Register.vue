@@ -159,6 +159,7 @@ export default {
         border: 1px solid #000000;
         box-shadow: 0px 0px 15px #00000029;
         width: 400px;
+        z-index: 2;
         overflow-y: auto;
     }
 

@@ -136,7 +136,7 @@ export default {
                 isEditWindowShow.value = true
                 isVisibleRegistComponent.value = false
                 console.log(clickedObj)
-            } catch (errpr) {
+            } catch (error) {
                 console.error('Error fetching item:', error);
             }
         }

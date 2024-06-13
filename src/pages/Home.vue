@@ -25,7 +25,7 @@ const handleShowRegistComponent = (value) => {
 }
 
 const windowClickHandler = () => {
-    isEditWindowShow.value = false
+    isVisibleRegistComponent.value = false
 }
 
 const stopPropagation = (event) => {
