@@ -12,7 +12,7 @@
             @updateRecords="updateMonthlyRecords" />
             <div class="visual-datas">
                 <CategoryPieChart :records="monthlyRecords" />
-                <YearlyProfitBarChart :recordList="recordList" @updateYear="updateCurrentYear" />
+                <YearlyProfitBarChart :recordList="recordList" :currentDate="currentDate" />
             </div>
             <ToRegisterButton />
         </div>
@@ -29,7 +29,6 @@ import ToRegisterButton from '@/components/ToRegisterButton.vue'
 
 const recordList = ref([])
 const monthlyRecords = ref([])
-const currentYear = ref(0)
 
 const getEveryRecords = async () => {
     const url = "http://localhost:3000/data"
@@ -63,10 +62,6 @@ const nextMonth = () => {
 // MonthlyExpenditure에서 추출한 해당 월 정보를 records에 업데이트, CategoryPieChart에서 사용하도록 함
 const updateMonthlyRecords = (records) => {
     monthlyRecords.value = records;
-}
-
-const updateCurrentYear = (year) => {
-    currentYear.value = year;
 }
 
 onMounted(() => {
@@ -112,11 +107,27 @@ onMounted(() => {
     width: 80%;
     max-width: 1200px;
     border-radius: 8px;
+    box-sizing: border-box;
 }
 
 .visual-datas {
     display: flex;
-    justify-content: space-around;
-    gap: 40px;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.chart-container {
+    flex-grow: 1;
+    flex-basis: 50%;
+    min-width: 300px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .chart-container {
+        flex-basis: 100%;
+    }
 }
 </style>
