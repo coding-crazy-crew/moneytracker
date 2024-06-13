@@ -9,9 +9,9 @@
                         <label for="p">비밀번호:</label>
                         <input type="password" name="pwd" id="p" required v-model="pwd" class="form-control" ><br>
                         <button class="btn btn-success"> 로그인</button>
-                    <button @click.preventDefault="switchSignUpHandler" class="btn-signup">회원가입</button>
-                        </div>
-                        </form>
+                        <button @click.preventDefault="switchSignUpHandler" class="btn-signup">회원가입</button>
+                    </div>
+                </form>
             </div>
     </div>
 </template>
@@ -74,7 +74,9 @@ export default {
         text-align: left;
     }
     .formwrapper{
-        border : 1px solid #95D2B3;
+        max-width:800px;
+        min-width: 600px;
+        margin:auto;
         padding:20px 0 50px 0;
         text-align: -webkit-center;
     }

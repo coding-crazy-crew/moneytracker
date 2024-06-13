@@ -1,20 +1,30 @@
 <template lang="">
-    <form class="signup" @submit.prevent="signupFormSubmitHandler">
-        <label for="i">아이디 : </label>
-        <input type="text" name="id" id="i" required v-model="c.userId"  />
-        <button type="button" @click="btDupchkClickHandler">중복확인</button>
-        <br />
-        <label for="p">비밀번호 :</label>
-        <input type="password" name="pwd" id="p" required v-model="c.pwd" ref="p" />
-        <br />
-        <label for="p1">비밀번호1 :</label>
-        <input type="password" id="p1" required v-model="pwd1" />
-        <br />
-
-        <label for="n">이름 :</label>
-        <input type="text" name="name" id="n" required v-model="c.name" />
-        <button type="submit" :class="[isBtSignup ? 'btSignupShow' : 'btSignupHide']"> 가입하기 </button>
-    </form>
+    <div class="outer">
+        <div class="main-content">
+            <div class="formwrapper mb-3 mt-3">
+                <h2>회원 가입</h2>
+                <form class="signup" @submit.prevent="signupFormSubmitHandler">
+                    <div class="input-list">
+                        <label for="i">아이디 </label>
+                        <div class="id-position">
+                            <input type="text" name="id" id="i" class="form-control" required v-model="c.userId"  />
+                            <button type="button" class="btn btn-sm btn-outline-success" @click="btDupchkClickHandler">중복확인</button>
+                        </div>
+                        <br />
+                        <label for="p">비밀번호 :</label>
+                        <input type="password" name="pwd" id="p" class="form-control" required v-model="c.pwd" ref="p" />
+                        <br />
+                        <label for="p1">비밀번호 확인 :</label>
+                        <input type="password" id="p1" class="form-control" required v-model="pwd1" />
+                        <br />
+                        <label for="n">이름 :</label>
+                        <input type="text" name="name" id="n" class="form-control" required v-model="c.name" />
+                        <button type="submit" :class="[isBtSignup ? 'btb btn-success btSignupShow' : 'btn btn-success btSignupHide']"> 가입하기 </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </template>
 <script>
   // import axios from 'axios'
@@ -93,6 +103,56 @@
     };
 </script>
 <style scoped>
+    .outer {
+        background-color : #D8EFD3;
+        margin: 0;
+        padding: 0;
+        height: 98vh;
+    }
+    
+    .main-content {
+        height:100vh;
+        background-color: #D8EFD3;
+        margin: 0 auto;
+        padding: 20px;
+        max-width: 60vw;
+        min-width: 30vh;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .input-list {
+        width: 60%;
+        text-align: left;
+    }
+    form{
+        /* align-items: center; */
+        justify-content: center;
+        }
+    .formwrapper{
+        max-width:800px;
+        min-width: 600px;
+        margin:auto;
+        padding:20px 0 50px 0;
+        text-align: -webkit-center;
+
+    }
+
+    .id-position{
+        position: relative;
+    }
+    .id-position button{
+        position: absolute;
+        width: 90px;
+        height: 38px;
+        top: 5;
+        bottom: 0;
+        right: 5px;
+        margin: auto 0;
+        border-radius: 3px; 
+        font-weight: bold;
+    }
+
 /* form.signup>button[type=submit] {
     display: none;
 } */
@@ -104,6 +164,9 @@
 
     .btSignupShow {
     display: block;
+    }
+    button[type="submit"]{
+        margin-top:10px;
     }
 
 </style>
