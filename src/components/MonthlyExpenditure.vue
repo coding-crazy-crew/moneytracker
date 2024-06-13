@@ -35,9 +35,15 @@
     </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed, onMounted, watch, defineEmits } from 'vue'
-import axios from "axios"
+<script setup>
+import { ref, computed, watch } from 'vue'
+
+const props = defineProps({
+    recordList: {
+        type: Object, 
+        required: true,
+    }
+})
 
 const emit = defineEmits(['updateRecords'])
 
@@ -60,22 +66,13 @@ const nextMonth = () => {
     date.setMonth(date.getMonth() + 1)
     currentDate.value = date
 }
-
-const recordList = ref([])
 const monthlyRecords = ref([])
-
-const getMonthRecords = async () => {
-    const url = "http://localhost:3000/data"
-    axios.get(url).then(response => {
-        recordList.value = response.data
-        filterMonthRecord()
-    })
-}
 
 const filterMonthRecord = () => {
     const year = currentDate.value.getFullYear()
     const month = currentDate.value.getMonth() + 1
-    monthlyRecords.value = recordList.value.filter((record) => {
+    monthlyRecords.value = props.recordList.filter((record) => {
+        console.log(record.date)
         const recordDate = new Date(record.date)
         return (
             recordDate.getFullYear() === year &&
@@ -104,11 +101,8 @@ const profit = computed(() => {
     return totalIncome.value - totalExpenses.value
 })
 
-onMounted(async () => {
-    await getMonthRecords()
-})
-
 watch(currentDate, filterMonthRecord)
+watch(() => props.recordList, filterMonthRecord, { immediate: true })
 </script>
 
 <style scoped>
