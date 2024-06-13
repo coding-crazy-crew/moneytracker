@@ -18,7 +18,7 @@
       </p>
       <p class="p_minus" v-else>
         이번달은 {{ currentMonthTotal.netIncome.toLocaleString() }} 원으로
-        순이익이 없어요, <br />재정관리에 힘쓰세요!
+        순이익이 없어요. <br />재정관리에 힘쓰세요!
       </p>
     </div>
     <div class="calendar">

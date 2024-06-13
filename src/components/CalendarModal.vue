@@ -5,10 +5,13 @@
       <h4>Money Tracker</h4>
       <ul>
         <li v-for="(event, index) in events" :key="index">
-          <p>날짜: {{ event.date }}</p>
-          <p>소비유형: {{ event.type === "income" ? "수입" : "지출" }}</p>
-          <p>금액: {{ event.amount.toLocaleString() }}</p>
-          <p>분류: {{ event.category }}</p>
+          <p>날짜 : {{ event.date }}</p>
+          <p>금액 : {{ event.amount.toLocaleString() }}</p>
+          <p>유형 : {{ event.type === "income" ? "수입" : "지출" }}</p>
+          <p>분류 : {{ event.category }}</p>
+          <p>유형 : {{event.asset}}</p>
+          <p>내용 : {{event.content}}</p>
+          <P></P>
         </li>
       </ul>
     </div>
