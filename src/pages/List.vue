@@ -39,10 +39,10 @@
                     </tbody>
                 </table>
             </div>
-            <ToRegisterButton/>
         </div>
-        <RegisterButton />
+        <RegisterButton @show-regist-component="handleShowRegistComponent"/>
         <EditTradeHistory v-if="isEditWindowShow" :tradeHistoryData="clickedObj"/>
+        <Register v-if="isVisibleRegistComponent"/>
     </div>
 </template>
 <script>
@@ -50,10 +50,11 @@ import axios from 'axios';
 import {computed, onMounted,reactive, ref} from 'vue';
 import RegisterButton from '../components/ToRegisterButton.vue';
 import EditTradeHistory from '../components/EditTradeHistory.vue';
+import Register from '../components/Register.vue';
 
 export default {
     name : "List",
-    components: {RegisterButton, EditTradeHistory},
+    components: {RegisterButton, EditTradeHistory, Register},
     setup(){
         const lists = reactive([]) //기본 모든 정보
         const filteredType = ref('all')
@@ -61,6 +62,12 @@ export default {
             year : 2024,
             month : "01"
         })
+
+        const isVisibleRegistComponent = ref(false);
+        const handleShowRegistComponent = (value) => {
+            isVisibleRegistComponent.value = value
+            isEditWindowShow.value = false
+        }
 
         onMounted(async() => {
             currentDate.year = new Date().getFullYear()
@@ -127,6 +134,7 @@ export default {
                 const response = await axios.get(`http://localhost:3000/data/${clickedId}`);
                 clickedObj.value = response.data;
                 isEditWindowShow.value = true
+                isVisibleRegistComponent.value = false
                 console.log(clickedObj)
             } catch (errpr) {
                 console.error('Error fetching item:', error);
@@ -135,13 +143,14 @@ export default {
 
         const windowClickHandler = () => {
             isEditWindowShow.value = false
+            isVisibleRegistComponent.value = false
         }
 
         const stopPropagation = (event) => {
             event.stopPropagation();
         }
 
-        return {currentDate,nextMonthList,previousMonthList,filteredItems,filteredType, itemClickHandler, isEditWindowShow, stopPropagation, clickedObj}
+        return {currentDate, isVisibleRegistComponent, handleShowRegistComponent, nextMonthList,previousMonthList,filteredItems,filteredType, itemClickHandler, isEditWindowShow, stopPropagation, clickedObj}
     }
 }
 </script>

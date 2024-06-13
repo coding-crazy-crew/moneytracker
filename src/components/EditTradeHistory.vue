@@ -131,12 +131,11 @@ export default {
         background-color: #D8EFD3;
         position: fixed;
         top: 50%;
-        right: 0;
-        transform: translate(0, -50%);
+        left: 50%;
+        transform: translate(-50%, -50%);
         border: 1px solid #000000;
         box-shadow: 0px 0px 15px #00000029;
         width: 400px;
-        max-height: 100vh;
         overflow-y: auto;
     }
 

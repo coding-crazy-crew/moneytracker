@@ -1,5 +1,5 @@
 <template lang="">
-    <div class="outer">
+    <div class="register-window" @click.stop>
         <div class="main-content">
             <form :class="register" @submit.prevent="registFormSubmitHandler">
                 <button 
@@ -77,7 +77,7 @@
 <script>
 import {reactive} from 'vue'
 import axios from 'axios'
-import {useRouter} from 'vue-router'
+import {useRouter,useRoute} from 'vue-router'
 
 export default {
     name: 'Register',
@@ -91,7 +91,9 @@ export default {
             asset: '',
             content: '',
         })
+
         const router = useRouter()
+        const route = useRoute()
         const registFormSubmitHandler = async (e) => {
             const url = `http://localhost:3000/data`
             const data = tradeHistoryData
@@ -106,7 +108,11 @@ export default {
             const dataJson = JSON.stringify(data)
             try{
                 const response = await axios.post(url, dataJson, {"Content-Type":"application/json"})
-                router.push("/list")
+                if(route.path==='/list') {
+                    location.reload()
+                }else{
+                    router.push("/list")
+                }
             } catch(err) {
                 console.log(err)
                 router.push("/")
@@ -117,6 +123,13 @@ export default {
         const registMoreEvent = async (e) => {
             const url = `http://localhost:3000/data`
             const data = tradeHistoryData
+            const response = await axios.get(url)
+            const ids = response.data.map((res) => {
+                return res.id;
+            })
+            const maxId = ids.length == 0 ? 0 : Math.max(...ids)
+            data.id = (maxId+1).toString();
+            data.amount = Number(data.amount)
             const dataJson = JSON.stringify(data)
             try{
                 const response = await axios.post(url, dataJson, {"Content-Type":"application/json"})
@@ -137,15 +150,20 @@ export default {
 }
 </script>
 <style scoped>
-    .outer {
-        background-color : #D8EFD3;
-        margin: 0;
-        padding: 0;
-        height: 98vh;
+    .register-window {
+        background-color: #D8EFD3;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border: 1px solid #000000;
+        box-shadow: 0px 0px 15px #00000029;
+        width: 400px;
+        overflow-y: auto;
     }
+
     
     .main-content {
-        height:100vh;
         background-color: #D8EFD3;
         margin: 0 auto;
         padding: 20px;
