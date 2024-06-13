@@ -1,13 +1,19 @@
 <template lang="">
-    <h2>로그인 페이지</h2>
-    <form @submit.prevent="loginFormSubmitHandler">
-        <label for="i">아이디:</label>
-        <input type="text" name="id" id="i" required  v-model="id"><br>
-        <label for="p">비밀번호:</label>
-        <input type="password" name="pwd" id="p" required v-model="pwd"><br>
-        <button>로그인</button>
-    </form>
-        <button @click.preventDefault="switchSignUpHandler">회원가입</button>
+    <div class="outer">
+            <div class="mb-3 mt-3" style="text-align: -webkit-center;">
+        <h2>로그인 페이지</h2>
+        <form @submit.prevent="loginFormSubmitHandler">
+            <div class="input-list">
+                <label for="i">아이디:</label>
+                <input type="text" name="id" id="i" required  v-model="id" class="form-control" ><br>
+                <label for="p">비밀번호:</label>
+                <input type="password" name="pwd" id="p" required v-model="pwd" class="form-control" ><br>
+                <button class="btn btn-success"> 로그인</button>
+            </div>
+            </form>
+                <button @click.preventDefault="switchSignUpHandler" class="btn btn-success">회원가입</button>
+                </div>
+        </div>
 </template>
 <script>
 import { useLoginInfoStore } from '@/stores/LoginInfo';
@@ -57,6 +63,17 @@ export default {
     }
 }
 </script>
-<style lang="">
-
+<style scoped>
+    .outer{
+        margin:auto
+    }
+    form{
+        /* align-items: center; */
+        justify-content: center;
+        width : 100%
+    }
+    .input-list {
+        width: 60%;
+        text-align: left;
+    }
 </style>

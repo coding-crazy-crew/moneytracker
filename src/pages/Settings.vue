@@ -1,8 +1,9 @@
 <template lang="">
-    <div>
-        <UserInfo v-if="showUserInfo"/>
-        <SignIn v-if="showSignIn" />
-        
+    <div class="outer">
+        <div class="main-content">
+            <UserInfo v-if="showUserInfo"/>
+            <SignIn v-if="showSignIn" />
+        </div>
     </div>
 </template>
 <script>
@@ -33,6 +34,20 @@ export default {
     }    
 }
 </script>
-<style lang="">
-    
+<style scoped>
+    .outer{
+        background-color: #D8EFD3;
+        border :2vh solid #D8EFD3;
+        min-height:98vh;
+        height: max-content;
+    }
+    .main-content {
+        background-color: #D8EFD3;
+        margin: 10px auto;
+        padding: 20px;
+        width: 80%;
+        max-width: 1200px;
+        border-radius: 8px;
+
+    }
 </style>
