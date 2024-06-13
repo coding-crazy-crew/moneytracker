@@ -5,12 +5,20 @@
                 <button 
                     type="button" 
                     class="btn btn-success" 
+<<<<<<< HEAD
                     :class="{active: tradeHistoryData.type === 'income'}" 
+=======
+                    :class="{active: tradeHistoryData.type === '수입'}" 
+>>>>>>> ac23eb16be41468607a5afebefec346a9bfdce6f
                     @click="setTradeType('income')">수입</button>
                 <button 
                     type="button" 
                     class="btn btn-success" 
+<<<<<<< HEAD
                     :class="{active: tradeHistoryData.type === 'expenses'}" 
+=======
+                    :class="{active: tradeHistoryData.type === '지출'}" 
+>>>>>>> ac23eb16be41468607a5afebefec346a9bfdce6f
                     @click="setTradeType('expenses')">지출</button>
 
                 <br>
@@ -145,6 +153,7 @@ export default {
     }
     
     .main-content {
+        height:100vh;
         background-color: #D8EFD3;
         margin: 0 auto;
         padding: 20px;

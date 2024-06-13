@@ -23,6 +23,9 @@
                 </ul>
             </div>
         </nav>
+        <!-- <div class="main-content">
+            본문 내용
+        </div> -->
     </div>
 </template>
 
@@ -84,4 +87,12 @@ export default {
     color: #166152 !important;
 }
 
+.main-content {
+    background-color: #D9D9D9;
+    margin: 20px auto;
+    padding: 20px;
+    width: 80%;
+    max-width: 1200px;
+    border-radius: 8px;
+}
 </style>
