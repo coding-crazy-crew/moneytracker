@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia'
-import { computed } from 'vue';
+import { computed,ref } from 'vue';
 
 export const useLoginInfoStore = defineStore("LoginInfo",()=>{
     const userId = ref('0'); //로그인 안 한 상태

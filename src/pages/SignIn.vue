@@ -4,7 +4,6 @@
         <input type="text" name="id" id="i" required  v-model="id"><br>
         <label for="p">비밀번호:</label>
         <input type="password" name="pwd" id="p" required v-model="pwd"><br>
-        <input type="checkbox" v-model="checked">아이디저장
         <button>로그인</button>
     </form>
 </template>
@@ -17,7 +16,6 @@ export default {
     setup() {
         let id = ref('')
         let pwd = ref('')
-        let checked = ref(true)
         const store = useLoginInfoStore()
 
         const loginFormSubmitHandler = async()=>{
@@ -42,7 +40,13 @@ export default {
             }
         }
 
-        //id 저장
+        const successLoginHandler = (data)=>{
+            if (data){
+                
+            }
+
+        }
+        
 
         return {id,  pwd, loginFormSubmitHandler}
     }
