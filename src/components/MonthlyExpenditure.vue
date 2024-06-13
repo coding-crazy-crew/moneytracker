@@ -1,10 +1,5 @@
 <template>
     <div>
-        <div class="month-bar">
-            <button @click="prevMonth" class="btn-icon"><i class="bi bi-caret-left-fill"></i></button>
-            <span class="currentMonth">{{ formattedDate }}</span>
-            <button @click="nextMonth" class="btn-icon"><i class="bi bi-caret-right-fill"></i></button>
-        </div>
         <hr>
         <div class="monthly-expenses">
             <table class="summary-table">
@@ -31,51 +26,39 @@
             </table>
             <br>
             <hr>
+            <br>
         </div>
     </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed, onMounted, watch, defineEmits } from 'vue'
-import axios from "axios"
+<script setup>
+import { ref, computed, watch } from 'vue'
+
+const props = defineProps({
+    recordList: {
+        type: Object, 
+        required: true,
+    },
+    currentDate: {
+        type: Date,
+        required: true,
+    },
+    formattedDate: {
+        type: String,
+        required: true,
+    }
+})
 
 const emit = defineEmits(['updateRecords'])
 
 const totalIncome = ref(0)
 const totalExpenses = ref(0)
-const currentDate = ref(new Date())
-
-const formattedDate = computed(() => {
-    return `${currentDate.value.getFullYear()}년 ${currentDate.value.getMonth() + 1}월`
-})
-
-const prevMonth = () => {
-    const date = new Date(currentDate.value)
-    date.setMonth(date.getMonth() - 1)
-    currentDate.value = date
-}
-
-const nextMonth = () => {
-    const date = new Date(currentDate.value)
-    date.setMonth(date.getMonth() + 1)
-    currentDate.value = date
-}
-
-const recordList = ref([])
 const monthlyRecords = ref([])
 
-const getMonthRecords = async () => {
-    const url = "http://localhost:3000/data"
-    axios.get(url).then(response => {
-        recordList.value = response.data
-        filterMonthRecord()
-    })
-}
-
 const filterMonthRecord = () => {
-    const year = currentDate.value.getFullYear()
-    const month = currentDate.value.getMonth() + 1
-    monthlyRecords.value = recordList.value.filter((record) => {
+    const year = props.currentDate.getFullYear()
+    const month = props.currentDate.getMonth() + 1
+    monthlyRecords.value = props.recordList.filter((record) => {
         const recordDate = new Date(record.date)
         return (
             recordDate.getFullYear() === year &&
@@ -104,36 +87,11 @@ const profit = computed(() => {
     return totalIncome.value - totalExpenses.value
 })
 
-onMounted(async () => {
-    await getMonthRecords()
-})
-
-watch(currentDate, filterMonthRecord)
+watch(() => props.currentDate, filterMonthRecord, { immediate: true })
+watch(() => props.recordList, filterMonthRecord, { immediate: true })
 </script>
 
 <style scoped>
-.month-bar {
-    display: flex;
-    align-items: left;
-    justify-content: left;
-    gap: 10px;
-}
-
-.btn-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background-color: transparent;
-    border: none;
-    color: black;
-    font-size: 18px;
-    cursor: pointer;
-}
-
-.currentMonth {
-    font-size: 18px;
-    font-weight: bold;
-}
 
 .monthly-expenses {
     display: flex;
@@ -148,7 +106,7 @@ watch(currentDate, filterMonthRecord)
     width: 100%;
     text-align: center;
     border-collapse: collapse;
-    margin-bottom: 20px;
+    margin-top: 20px;
 }
 
 .summary-table th,
