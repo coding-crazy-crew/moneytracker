@@ -72,6 +72,8 @@ h4 {
   border-radius: 10px;
   width: 80%;
   max-width: 600px;
+  max-height: 80%;
+  overflow-y: scroll;
   position: relative;
 }
 
