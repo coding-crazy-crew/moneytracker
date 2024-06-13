@@ -1,5 +1,5 @@
 <template lang="">
-        <div class = "outer">
+        <div class = "outer" @click="windowClickHandler">
     <div class="main-content">
             <div class="grid-container">
                 <div class="grid-item item1">
@@ -28,7 +28,7 @@
                         </tr>
                     </thead>
                     <tbody class="tb-tbody">
-                        <tr v-for="i in filteredItems" :key="i.id" :class="`tr ${i.id}`" @click="itemClickHandler" >
+                        <tr v-for="i in filteredItems" :key="i.id" :class="`tr ${i.id}`" @click.stop="itemClickHandler" >
                             <td>{{i.date.substring(2)}}</td>
                             <td>{{i.amount.toLocaleString('ko-KR')}}</td>
                             <td><span class="type">{{i.type}}</span></td>
@@ -40,14 +40,20 @@
                 </table>
             </div>
         </div>
+        <RegisterButton />
+        <EditTradeHistory v-if="isEditWindowShow" :tradeHistoryData="clickedObj"/>
     </div>
 </template>
 <script>
 
 import axios from 'axios';
 import {computed, onMounted,reactive, ref} from 'vue';
+import RegisterButton from '../components/ToRegisterButton.vue';
+import EditTradeHistory from '../components/EditTradeHistory.vue';
+
 export default {
     name : "List",
+    components: {RegisterButton, EditTradeHistory},
     setup(){
         const lists = reactive([]) //기본 모든 정보
         const filteredType = ref('all')
@@ -59,6 +65,7 @@ export default {
         onMounted(async() => {
             currentDate.year = new Date().getFullYear()
             currentDate.month = String(new Date().getMonth() + 1).padStart(2,'0')
+            window.addEventListener('click', windowClickHandler);
             await getCurrentMonthList()
         })
         
@@ -110,13 +117,23 @@ export default {
         }
 
         //itemClickHandler : 수정 삭제 컴포넌트 visible 관리, props 관리
+        const isEditWindowShow = ref(false)
+        const clickedObj = ref(null)
         const itemClickHandler = (event)=>{
+            isEditWindowShow.value = true
             const clickedId = event.currentTarget.getAttribute('class').split(' ')[1]
             //객체 id가 clickedId 인 객체 찾기
-            const clickedObj = lists[clickedId-1]
-            console.log(clickedObj)
+            clickedObj.value = lists[clickedId-1]
         }
-        return {currentDate,nextMonthList,previousMonthList,filteredItems,filteredType, itemClickHandler}
+
+        const windowClickHandler = () => {
+            isEditWindowShow.value = false
+        }
+
+        const stopPropagation = (event) => {
+            event.stopPropagation();
+        }
+        return {currentDate,nextMonthList,previousMonthList,filteredItems,filteredType, itemClickHandler, isEditWindowShow, stopPropagation, clickedObj}
     }
 }
 </script>

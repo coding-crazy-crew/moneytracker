@@ -1,17 +1,17 @@
 <template lang="">
-    <div>
+    <div class="outer">
         <div class="main-content">
             <form :class="register" @submit.prevent="registFormSubmitHandler">
                 <button 
                     type="button" 
                     class="btn btn-success" 
-                    :class="{active: tradeHistoryData.type === '수입'}" 
-                    @click="setTradeType('수입')">수입</button>
+                    :class="{active: tradeHistoryData.type === 'income'}" 
+                    @click="setTradeType('income')">수입</button>
                 <button 
                     type="button" 
                     class="btn btn-success" 
-                    :class="{active: tradeHistoryData.type === '지출'}" 
-                    @click="setTradeType('지출')">지출</button>
+                    :class="{active: tradeHistoryData.type === 'expenses'}" 
+                    @click="setTradeType('expenses')">지출</button>
 
                 <br>
                 <div class="mb-3 mt-3" style="text-align: -webkit-center;">
@@ -95,15 +95,21 @@ export default {
         const registFormSubmitHandler = async (e) => {
             const url = `http://localhost:3000/data`
             const data = tradeHistoryData
-            console.log(data)
+
+            const response = await axios.get(url)
+            const ids = response.data.map((res) => {
+                return res.id;
+            })
+            const maxId = ids.length == 0 ? 0 : Math.max(...ids)
+            data.id = (maxId+1).toString();
+            data.amount = Number(data.amount)
             const dataJson = JSON.stringify(data)
-            console.log(dataJson)
             try{
                 const response = await axios.post(url, dataJson, {"Content-Type":"application/json"})
-                router.go(-1) // 새로 고침이 아니라 이전 페이지로 이동
+                router.go(-1)
             } catch(err) {
                 console.log(err)
-                // router.push("/")
+                router.push("/")
             }
         }
 
@@ -124,17 +130,18 @@ export default {
             tradeHistoryData.type = type;
         }
 
-        setTradeType('수입');
+        setTradeType('income');
 
         return {tradeHistoryData, registFormSubmitHandler, registMoreEvent, setTradeType}
     }
 }
 </script>
 <style scoped>
-    div {
+    .outer {
         background-color : #D8EFD3;
         margin: 0;
         padding: 0;
+        height: 98vh;
     }
     
     .main-content {
