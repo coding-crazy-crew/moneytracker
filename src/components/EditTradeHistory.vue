@@ -103,6 +103,7 @@ export default {
 
         const editFormSubmitHandler = async (e) => {
             const url = `http://localhost:3000/data/${tradeHistoryData.id}`
+            tradeHistoryData.amount = Number(tradeHistoryData.amount)
             const dataJson = JSON.stringify(tradeHistoryData)
             try {
                 await axios.put(url, dataJson, { "Content-Type": "application/json" });
