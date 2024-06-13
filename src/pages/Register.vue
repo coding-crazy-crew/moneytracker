@@ -6,12 +6,12 @@
                     type="button" 
                     class="btn btn-success" 
                     :class="{active: tradeHistoryData.type === '수입'}" 
-                    @click="setTradeType('수입')">수입</button>
+                    @click="setTradeType('income')">수입</button>
                 <button 
                     type="button" 
                     class="btn btn-success" 
                     :class="{active: tradeHistoryData.type === '지출'}" 
-                    @click="setTradeType('지출')">지출</button>
+                    @click="setTradeType('expenses')">지출</button>
 
                 <br>
                 <div class="mb-3 mt-3" style="text-align: -webkit-center;">
@@ -124,7 +124,7 @@ export default {
             tradeHistoryData.type = type;
         }
 
-        setTradeType('수입');
+        setTradeType('income');
 
         return {tradeHistoryData, registFormSubmitHandler, registMoreEvent, setTradeType}
     }
@@ -138,6 +138,7 @@ export default {
     }
     
     .main-content {
+        height:100vh;
         background-color: #D8EFD3;
         margin: 0 auto;
         padding: 20px;
