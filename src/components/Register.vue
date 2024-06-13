@@ -68,7 +68,7 @@
                 </div>
                 <div class="bottom-button">
                     <button type="submit" class="btn btn-success">저장</button>
-                    <button type="button" class="btn btn-success" @click="registMoreEvent">계속</button>
+                    <button type="button" class="btn btn-success" @click="registMoreEvent">저장 후 계속</button>
                 </div>
             </form>
         </div>
