@@ -18,14 +18,11 @@
       </p>
       <p class="p_minus" v-else>
         이번달은 {{ currentMonthTotal.netIncome.toLocaleString() }} 원으로
-        순이익이 없어요. <br />재정관리에 힘쓰세요!
+        순이익이 없어요, <br />재정관리에 힘쓰세요!
       </p>
     </div>
     <div class="calendar">
-      <FullCalendar
-        :options="calendarOptions"
-        @datesSet="handleDatesSetHandler"
-      />
+      <FullCalendar :options="calendarOptions" @datesSet="handleDatesSet" />
     </div>
     <ToRegisterButton />
     <CalendarModal
@@ -68,6 +65,7 @@ onMounted(() => {
 
 watch(filterType, () => {
   updateCalendarEvents();
+  updateCurrentMonthTotal();
 });
 
 const requestList = async () => {
@@ -82,7 +80,7 @@ const requestList = async () => {
       textColor: event.type === "income" ? "#55AD9B" : "black",
       borderColor: "#F1F8E8",
       backgroundColor: "#F1F8E8",
-      ...event,
+      ...event, // 모든 데이터를 포함하도록 확장
     }));
     allEvents.value = events;
     calculateMonthlyTotals(events);
@@ -92,7 +90,6 @@ const requestList = async () => {
   }
 };
 
-//calculateMonthlyTotals: 월별 총 수입과 지출을 계산하는 함수
 const calculateMonthlyTotals = (events) => {
   const totals = {};
   events.forEach((event) => {
@@ -115,7 +112,6 @@ const calculateMonthlyTotals = (events) => {
   monthlyTotals.value = totals;
 };
 
-// updateCalendarEvents: 캘린더 이벤트를 업데이트하는 함수
 const updateCalendarEvents = () => {
   if (filterType.value === "all") {
     calendarOptions.events = allEvents.value;
@@ -124,7 +120,7 @@ const updateCalendarEvents = () => {
       (event) => event.type === filterType.value
     );
   }
-
+  // 현재 보이는 날짜 범위를 기준으로 계산
   const calendarApi = document
     .querySelector(".fc")
     ?.__vueParentComponent.ctx.getApi();
@@ -135,7 +131,18 @@ const updateCalendarEvents = () => {
   }
 };
 
-//calculateMonthlyTotal: 특정 날짜 범위의 총 수입과 지출을 계산하는 함수
+const updateCurrentMonthTotal = () => {
+  // 현재 보이는 달의 총합계를 업데이트
+  const calendarApi = document
+    .querySelector(".fc")
+    ?.__vueParentComponent.ctx.getApi();
+  if (calendarApi) {
+    const start = new Date(calendarApi.view.currentStart);
+    const end = new Date(calendarApi.view.currentEnd);
+    currentMonthTotal.value = calculateMonthlyTotal(start, end);
+  }
+};
+
 const calculateMonthlyTotal = (start, end) => {
   const totals = { income: 0, expenses: 0, netIncome: 0 };
   const monthKey = `${start.getFullYear()}-${String(
@@ -149,8 +156,7 @@ const calculateMonthlyTotal = (start, end) => {
   return totals;
 };
 
-//handleDatesSetHandler: FullCalendar의 datesSet 이벤트 핸들러
-const handleDatesSetHandler = (info) => {
+const handleDatesSet = (info) => {
   const start = new Date(info.start);
   const end = new Date(info.end);
   currentMonth.value = `${start.getFullYear()}-${String(
@@ -159,7 +165,6 @@ const handleDatesSetHandler = (info) => {
   currentMonthTotal.value = calculateMonthlyTotal(start, end);
 };
 
-//dateClickHandler: 날짜 클릭 시 모달 호출 이벤트 핸들러
 const dateClickHandler = (info) => {
   const clickedDate = formatDate(info.date);
   selectedEvents.value = allEvents.value.filter(
@@ -171,6 +176,7 @@ const dateClickHandler = (info) => {
 const filterEvents = (type) => {
   filterType.value = type;
   updateCalendarEvents();
+  updateCurrentMonthTotal(); // 탭 변경 시 현재 월 총합계 업데이트
 };
 
 const formatDate = (date) => {
@@ -212,7 +218,7 @@ const formatDate = (date) => {
 
 p {
   font-size: 20px;
-  text-align: center;
+  text-align: cet;
 }
 .p_minus {
   color: red;
