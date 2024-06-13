@@ -23,7 +23,7 @@
                             <td width=14%>금액</td>
                             <td width=14%>유형</td>
                             <td width=14%>분류</td>
-                            <td width=14%>카테고리</td>
+                            <td width=14%>자산</td>
                             <td width=30%>내용</td>
                         </tr>
                     </thead>
@@ -32,8 +32,8 @@
                             <td>{{i.date.substring(2)}}</td>
                             <td>{{i.amount.toLocaleString('ko-KR')}}</td>
                             <td><span class="type">{{i.type}}</span></td>
-                            <td>{{i.asset}}</td>
                             <td>{{i.category}}</td>
+                            <td>{{i.asset}}</td>
                             <td class="content">{{i.content}}</td>
                         </tr>
                     </tbody>
