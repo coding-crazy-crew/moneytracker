@@ -138,6 +138,7 @@ export default {
     }
     
     .main-content {
+        height:100vh;
         background-color: #D8EFD3;
         margin: 0 auto;
         padding: 20px;
