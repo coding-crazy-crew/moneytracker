@@ -13,7 +13,7 @@
 
         <label for="n">이름 :</label>
         <input type="text" name="name" id="n" required v-model="c.name" />
-        <button type="submit" :class="[isBtSignup ? 'btSignupShow' : 'btSignupHide']"> 가입하기 </button>
+        <button type="submit"> 가입하기 </button>
     </form>
 </template>
 <script>
@@ -24,7 +24,6 @@
     name: "Signup",
     setup() {
         let pwd1 = ref("");
-        let isBtSignup = ref(false); //가입버튼 보여주기 여부
         let c = reactive({
         userId: "",
         pwd: "",
@@ -42,18 +41,18 @@
             pwdObj.select();
             } else {
             const url = `http://localhost:3000/user`;
-            const data = c;
+            const data = JSON.stringify(c);
             try{
                 const response = await axios.post(url,data,{"Content-Type": "application/json"})
                 console.log(response)
             }catch(err){
+                alert("에러 발생@")
                 alert(err.response.data)
             }
             }
         };
         return {
             pwd1,
-            isBtSignup,
             c,
             profile,
             p,
