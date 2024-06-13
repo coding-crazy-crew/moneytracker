@@ -26,6 +26,7 @@
             </table>
             <br>
             <hr>
+            <br>
         </div>
     </div>
 </template>
@@ -105,7 +106,7 @@ watch(() => props.recordList, filterMonthRecord, { immediate: true })
     width: 100%;
     text-align: center;
     border-collapse: collapse;
-    margin-bottom: 20px;
+    margin-top: 20px;
 }
 
 .summary-table th,
