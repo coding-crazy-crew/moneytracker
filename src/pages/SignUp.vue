@@ -26,12 +26,23 @@
         let pwd1 = ref("");
         let c = reactive({
         userId: "",
+        id:0,
         pwd: "",
         name: "",
         });
         const profile = ref("");
-        
+        const url = `http://localhost:3000/user`;
     
+        const setNextId = async()=>{
+            const response = await axios.get(url)
+            const ids = response.data.map((memo)=>{
+                    return memo.id;
+            }) //ids: [1,2,3]
+            const maxId = ids.length ==0? 0 : Math.max(...ids)
+            
+            c.id= maxId +1
+        }
+
         //----폼객체에서 submit이벤트 발생했을때 할 일 START----
         const p = ref(null); //<input ref="p">
         const signupFormSubmitHandler = async (e) => {
@@ -40,15 +51,16 @@
             const pwdObj = p.value;
             pwdObj.select();
             } else {
-            const url = `http://localhost:3000/user`;
-            const data = JSON.stringify(c);
-            try{
-                const response = await axios.post(url,data,{"Content-Type": "application/json"})
-                console.log(response)
-            }catch(err){
-                alert("에러 발생@")
-                alert(err.response.data)
-            }
+                setNextId()
+                
+                const data = JSON.stringify(c);
+                try{
+                    const response = await axios.post(url,data,{"Content-Type": "application/json"})
+                    console.log(response)
+                }catch(err){
+                    alert("에러 발생@")
+                    alert(err.response.data)
+                }
             }
         };
         return {
