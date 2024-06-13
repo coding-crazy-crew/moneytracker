@@ -1,10 +1,5 @@
 <template>
     <div>
-        <div class="month-bar">
-            <button @click="prevMonth" class="btn-icon"><i class="bi bi-caret-left-fill"></i></button>
-            <span class="currentMonth">{{ formattedDate }}</span>
-            <button @click="nextMonth" class="btn-icon"><i class="bi bi-caret-right-fill"></i></button>
-        </div>
         <hr>
         <div class="monthly-expenses">
             <table class="summary-table">
@@ -42,6 +37,14 @@ const props = defineProps({
     recordList: {
         type: Object, 
         required: true,
+    },
+    currentDate: {
+        type: Date,
+        required: true,
+    },
+    formattedDate: {
+        type: String,
+        required: true,
     }
 })
 
@@ -49,30 +52,12 @@ const emit = defineEmits(['updateRecords'])
 
 const totalIncome = ref(0)
 const totalExpenses = ref(0)
-const currentDate = ref(new Date())
-
-const formattedDate = computed(() => {
-    return `${currentDate.value.getFullYear()}년 ${currentDate.value.getMonth() + 1}월`
-})
-
-const prevMonth = () => {
-    const date = new Date(currentDate.value)
-    date.setMonth(date.getMonth() - 1)
-    currentDate.value = date
-}
-
-const nextMonth = () => {
-    const date = new Date(currentDate.value)
-    date.setMonth(date.getMonth() + 1)
-    currentDate.value = date
-}
 const monthlyRecords = ref([])
 
 const filterMonthRecord = () => {
-    const year = currentDate.value.getFullYear()
-    const month = currentDate.value.getMonth() + 1
+    const year = props.currentDate.getFullYear()
+    const month = props.currentDate.getMonth() + 1
     monthlyRecords.value = props.recordList.filter((record) => {
-        console.log(record.date)
         const recordDate = new Date(record.date)
         return (
             recordDate.getFullYear() === year &&
@@ -101,33 +86,11 @@ const profit = computed(() => {
     return totalIncome.value - totalExpenses.value
 })
 
-watch(currentDate, filterMonthRecord)
+watch(() => props.currentDate, filterMonthRecord, { immediate: true })
 watch(() => props.recordList, filterMonthRecord, { immediate: true })
 </script>
 
 <style scoped>
-.month-bar {
-    display: flex;
-    align-items: left;
-    justify-content: left;
-    gap: 10px;
-}
-
-.btn-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background-color: transparent;
-    border: none;
-    color: black;
-    font-size: 18px;
-    cursor: pointer;
-}
-
-.currentMonth {
-    font-size: 18px;
-    font-weight: bold;
-}
 
 .monthly-expenses {
     display: flex;
