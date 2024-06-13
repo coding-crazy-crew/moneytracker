@@ -321,7 +321,7 @@
       "date": "5/3/2024",
       "amount": 4745460,
       "category": "기타",
-      "asset": "우리은행",
+      "asset": "은행",
       "content": "Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris.\n\nMorbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis."
     },
     {
@@ -852,7 +852,7 @@
       "date": "6/5/2024",
       "amount": 95209334,
       "category": "기타",
-      "asset": "현금",
+      "asset": "은행",
       "content": "Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.\n\nSed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus."
     },
     {
@@ -893,8 +893,8 @@
     },
     {
       "id": "101",
-      "type": "income",
-      "date": "6/11/2024",
+      "type": "expenses",
+      "date": "2024-06-11",
       "amount": 1000000,
       "category": "주거/통신",
       "asset": "현금",
@@ -939,11 +939,47 @@
     {
       "id": "107",
       "type": "expenses",
-      "date": "6/13/2024",
+      "date": "2024-06-13",
       "amount": 1000000,
       "category": "식비",
       "asset": "은행",
       "content": "히히히"
+    },
+    {
+      "id": 1718244878239,
+      "type": "expenses",
+      "date": "6/11/2023",
+      "amount": "2000000",
+      "category": "생활용품",
+      "asset": "현금",
+      "content": "Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris.Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis."
+    },
+    {
+      "id": "1718244878240",
+      "type": "income",
+      "date": "6/11/2024",
+      "amount": 2000000,
+      "category": "패션/미용",
+      "asset": "은행",
+      "content": "히히히"
+    },
+    {
+      "id": "1718244878241",
+      "type": "income",
+      "date": "6/11/2023",
+      "amount": 2000000,
+      "category": "마트/편의점",
+      "asset": "카드",
+      "content": "Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris.Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis."
+    },
+    {
+      "id": "1718244878242",
+      "type": "expenses",
+      "date": "6/11/2024",
+      "amount": 2000000,
+      "category": "마트/편의점",
+      "asset": "은행",
+      "content": "Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris.Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis."
     }
   ]
 }

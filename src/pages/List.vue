@@ -45,11 +45,9 @@
         <EditTradeHistory v-if="isEditWindowShow" :tradeHistoryData="clickedObj"/>
     </div>
 </template>
-<script setup>
-import ToRegisterButton from '@/components/ToRegisterButton.vue'
+<script>
 import axios from 'axios';
 import {computed, onMounted,reactive, ref} from 'vue';
-<<<<<<< HEAD
 import RegisterButton from '../components/ToRegisterButton.vue';
 import EditTradeHistory from '../components/EditTradeHistory.vue';
 
@@ -121,11 +119,18 @@ export default {
         //itemClickHandler : 수정 삭제 컴포넌트 visible 관리, props 관리
         const isEditWindowShow = ref(false)
         const clickedObj = ref(null)
-        const itemClickHandler = (event)=>{
-            isEditWindowShow.value = true
+        const itemClickHandler = async (event)=>{
             const clickedId = event.currentTarget.getAttribute('class').split(' ')[1]
+            console.log(clickedId)
             //객체 id가 clickedId 인 객체 찾기
-            clickedObj.value = lists[clickedId-1]
+            try{
+                const response = await axios.get(`http://localhost:3000/data/${clickedId}`);
+                clickedObj.value = response.data;
+                isEditWindowShow.value = true
+                console.log(clickedObj)
+            } catch (errpr) {
+                console.error('Error fetching item:', error);
+            }
         }
 
         const windowClickHandler = () => {
@@ -135,78 +140,10 @@ export default {
         const stopPropagation = (event) => {
             event.stopPropagation();
         }
+
         return {currentDate,nextMonthList,previousMonthList,filteredItems,filteredType, itemClickHandler, isEditWindowShow, stopPropagation, clickedObj}
-=======
-
-    
-    const lists = reactive([]) //기본 모든 정보
-    const filteredType = ref('all')
-    const currentDate = reactive({
-        year : 2024,
-        month : "01"
-    })
-
-    onMounted(async() => {
-        currentDate.year = new Date().getFullYear()
-        currentDate.month = String(new Date().getMonth() + 1).padStart(2,'0')
-        await getCurrentMonthList()
-    })
-    
-    // getCurrentMonthList : 기록 내역 가져오기
-    const getCurrentMonthList = async()=>{
-        const response = await axios.get('http://localhost:3000/data')
-        response.data.map((item)=>{
-            item.type = item.type=== 'expenses' ? '지출' : '수입'
-            item.date= formatDate(item.date)
-            item.content = item.content.length < 100 ? item.content : item.content.substr(0,100) +" ..."
-        })
-        Object.assign(lists,response.data)
->>>>>>> ac23eb16be41468607a5afebefec346a9bfdce6f
     }
-
-    // formDate : 날짜를 'YYYY-MM-DD'형식으로 변환하는 함수
-    const formatDate = (date) => {
-        const d = new Date(date)
-        const year = d.getFullYear()
-        const month = String(d.getMonth() + 1).padStart(2, '0')
-        const day = String(d.getDate()).padStart(2, '0')
-        return `${year}-${month}-${day}`
-    }
-    
-    // filteredItems : Filter 항목을 적용하여 list 반환
-    const filteredItems = computed(() => {
-        let dateFiltered = lists.filter(item => item.date.substr(0,7)  === `${currentDate.year}-${currentDate.month}`)
-        let typeFiltered = filteredType.value ==='all' ? dateFiltered : dateFiltered.filter(item =>item.type === filteredType.value)
-        return typeFiltered
-    });
-
-    // nextMonthList : 다음 월의 내역 가지고오기
-    const nextMonthList = (event) =>{
-        if(parseInt(currentDate.month) >11){
-            currentDate.month = "01"
-            currentDate.year++
-        }else{
-            currentDate.month = String(parseInt(currentDate.month) +1).padStart(2,'0')
-        }
-    }
-
-    // previousMonthList : 이전 월의 내역 가지고오기
-    const previousMonthList = (event) =>{
-        if(currentDate.month <2){
-            currentDate.month = '12'
-            currentDate.year--
-        }else{
-            currentDate.month =String(parseInt(currentDate.month) -1).padStart(2,'0')
-        }
-    }
-
-    //itemClickHandler : 수정 삭제 컴포넌트 visible 관리, props 관리
-    const itemClickHandler = (event)=>{
-        const clickedId = event.currentTarget.getAttribute('class').split(' ')[1]
-        //객체 id가 clickedId 인 객체 찾기
-        const clickedObj = lists[clickedId-1]
-        console.log(clickedObj)
-        }
+}
 </script>
 <style scoped>
     /* layout style */
