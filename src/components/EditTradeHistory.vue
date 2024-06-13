@@ -35,7 +35,7 @@
                                 v-model="tradeHistoryData.amount"
                             />
                             <label for="category" class="form-label">분류</label>
-                            <select class="form-select" v-model="tradeHistoryData.category">
+                            <select class="form-select" v-model="tradeHistoryData.category" v-if="tradeHistoryData.type==='expenses'">
                                 <option>식비</option>
                                 <option>교통/차량</option>
                                 <option>문화생활</option>
@@ -47,6 +47,14 @@
                                 <option>교육</option>
                                 <option>경조사/회비</option>
                                 <option>부모님</option>
+                                <option>기타</option>
+                            </select>
+                            <select class="form-select" v-model="tradeHistoryData.category" v-if="tradeHistoryData.type==='income'">
+                                <option>월급</option>
+                                <option>부수입</option>
+                                <option>용돈</option>
+                                <option>상여</option>
+                                <option>금융소득</option>
                                 <option>기타</option>
                             </select>
                             <label for="asset" class="form-label">자산</label>
@@ -95,6 +103,7 @@ export default {
 
         const editFormSubmitHandler = async (e) => {
             const url = `http://localhost:3000/data/${tradeHistoryData.id}`
+            tradeHistoryData.amount = Number(tradeHistoryData.amount)
             const dataJson = JSON.stringify(tradeHistoryData)
             try {
                 await axios.put(url, dataJson, { "Content-Type": "application/json" });
@@ -131,12 +140,11 @@ export default {
         background-color: #D8EFD3;
         position: fixed;
         top: 50%;
-        right: 0;
-        transform: translate(0, -50%);
+        left: 50%;
+        transform: translate(-50%, -50%);
         border: 1px solid #000000;
         box-shadow: 0px 0px 15px #00000029;
         width: 400px;
-        max-height: 100vh;
         overflow-y: auto;
     }
 

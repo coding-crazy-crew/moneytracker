@@ -6,21 +6,14 @@
             <img 
                 src="/public/AddButton.png" 
                 alt="거래내역 등록하러 가기" 
-                @click="toRegisterPage">
+                @click.stop="$emit('showRegistComponent', true)">
         </button>
     </div>
 </template>
 <script>
-import {useRouter} from 'vue-router'
 export default {
     name: 'ToRegisterButton',
     setup() {
-        const router = useRouter()
-
-        const toRegisterPage = () => {
-            router.push('/register')
-        }
-        return { toRegisterPage}
     }
 }
 </script>
