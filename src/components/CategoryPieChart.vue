@@ -89,6 +89,11 @@ const computedChartData = computed(() => ({
 const chartOptions = ref({
     responsive: true,
     maintainAspectRatio: false,
+    plugins: {
+        legend: {
+            display: false
+        },
+    }
 })
 
 watch(() => props.records, updateCategoryExpenses, { immediate: true })
