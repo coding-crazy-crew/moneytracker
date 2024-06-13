@@ -43,8 +43,8 @@ export default {
     }
     .main-content {
         background-color: #D8EFD3;
-        margin: 10px auto;
-        padding: 20px;
+        margin: 0px auto;
+        /* padding: 20px; */
         width: 80%;
         max-width: 1200px;
         border-radius: 8px;

@@ -1,19 +1,19 @@
 <template lang="">
-    <div class="outer">
-            <div class="mb-3 mt-3" style="text-align: -webkit-center;">
-        <h2>Money Tracker</h2>
-                <button @click.preventDefault="switchSignUpHandler" class="btn-signup">회원가입</button>
-        <form @submit.prevent="loginFormSubmitHandler">
-            <div class="input-list">
-                <label for="i">아이디:</label>
-                <input type="text" name="id" id="i" required  v-model="id" class="form-control" ><br>
-                <label for="p">비밀번호:</label>
-                <input type="password" name="pwd" id="p" required v-model="pwd" class="form-control" ><br>
-                <button class="btn btn-success"> 로그인</button>
+    <div>
+            <div class="formwrapper mb-3 mt-3">
+                <h2>로그인</h2>
+                <form @submit.prevent="loginFormSubmitHandler">
+                    <div class="input-list">
+                        <label for="i">아이디:</label>
+                        <input type="text" name="id" id="i" required  v-model="id" class="form-control" ><br>
+                        <label for="p">비밀번호:</label>
+                        <input type="password" name="pwd" id="p" required v-model="pwd" class="form-control" ><br>
+                        <button class="btn btn-success"> 로그인</button>
+                    <button @click.preventDefault="switchSignUpHandler" class="btn-signup">회원가입</button>
+                        </div>
+                        </form>
             </div>
-            </form>
-                </div>
-        </div>
+    </div>
 </template>
 <script>
 import { useLoginInfoStore } from '@/stores/LoginInfo';
@@ -64,9 +64,6 @@ export default {
 }
 </script>
 <style scoped>
-    .outer{
-        margin:auto
-    }
     form{
         /* align-items: center; */
         justify-content: center;
@@ -76,8 +73,21 @@ export default {
         width: 60%;
         text-align: left;
     }
+    .formwrapper{
+        border : 1px solid #95D2B3;
+        padding:20px 0 50px 0;
+        text-align: -webkit-center;
+    }
+
+    .btn-success{
+        width:100%;
+    }
+
     .btn-signup{
+        text-decoration : underline;
+        color: gray;
         background-color: transparent;
-        border:none
+        border:none;      
+        margin-top:5px;
     }
 </style>
