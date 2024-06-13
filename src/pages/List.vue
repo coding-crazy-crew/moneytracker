@@ -40,7 +40,7 @@
                 </table>
             </div>
         </div>
-        <RegisterButton @show-regist-component="handleShowRegistComponent"/>
+        <toRegisterButton @show-regist-component="handleShowRegistComponent"/>
         <EditTradeHistory v-if="isEditWindowShow" :tradeHistoryData="clickedObj"/>
         <Register v-if="isVisibleRegistComponent"/>
     </div>
@@ -48,13 +48,13 @@
 <script>
 import axios from 'axios';
 import {computed, onMounted,reactive, ref} from 'vue';
-import RegisterButton from '../components/ToRegisterButton.vue';
+import toRegisterButton from '../components/ToRegisterButton.vue';
 import EditTradeHistory from '../components/EditTradeHistory.vue';
 import Register from '../components/Register.vue';
 
 export default {
     name : "List",
-    components: {RegisterButton, EditTradeHistory, Register},
+    components: {toRegisterButton, EditTradeHistory, Register},
     setup(){
         const lists = reactive([]) //기본 모든 정보
         const filteredType = ref('all')

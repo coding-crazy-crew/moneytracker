@@ -1,9 +1,11 @@
 <template>
-    <div class="outer">
+    <div class="outer" @click="windowClickHandler">
         <div class="main-content">
             <MonthlyExpenditure @updateRecords="updateMonthlyRecords" />
             <CategoryPieChart :records="monthlyRecords" />
             <ToRegisterButton/>
+            <toRegisterButton @show-regist-component="handleShowRegistComponent"/>
+            <Register v-if="isVisibleRegistComponent"/>
         </div>
     </div>
 </template>
@@ -13,8 +15,22 @@ import { ref } from 'vue'
 import MonthlyExpenditure from '@/components/MonthlyExpenditure.vue'
 import CategoryPieChart from '@/components/CategoryPieChart.vue'
 import ToRegisterButton from '@/components/ToRegisterButton.vue'
+import Register from '@/components/Register.vue';
 
 const monthlyRecords = ref([])
+
+const isVisibleRegistComponent = ref(false);
+const handleShowRegistComponent = (value) => {
+    isVisibleRegistComponent.value = value
+}
+
+const windowClickHandler = () => {
+    isEditWindowShow.value = false
+}
+
+const stopPropagation = (event) => {
+    event.stopPropagation();
+}
 
 // MonthlyExpenditure에서 추출한 해당 월 정보를 records에 업데이트, CategoryPieChart에서 사용하도록 함
 const updateMonthlyRecords = (records) => {

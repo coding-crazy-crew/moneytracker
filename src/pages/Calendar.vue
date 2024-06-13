@@ -1,5 +1,5 @@
 <template>
-  <div class="outer">
+  <div class="outer" @click="windowClickHandler">
     <div class="tab">
       <Tab @tab-selected="filterEvents" />
     </div>
@@ -24,17 +24,17 @@
     <div class="calendar">
       <FullCalendar :options="calendarOptions" @datesSet="handleDatesSet" />
     </div>
-    <ToRegisterButton />
     <CalendarModal
       v-if="showModal"
       @close="showModal = false"
       :events="selectedEvents"
     />
+    <toRegisterButton @show-regist-component="handleShowRegistComponent"/>
+    <Register v-if="isVisibleRegistComponent"/>
   </div>
 </template>
 
 <script setup>
-import ToRegisterButton from "@/components/ToRegisterButton.vue";
 import Tab from "@/components/Tab.vue";
 import CalendarModal from "@/components/CalendarModal.vue";
 import { ref, onMounted, reactive, watch } from "vue";
@@ -42,6 +42,8 @@ import FullCalendar from "@fullcalendar/vue3";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import axios from "axios";
+import ToRegisterButton from '@/components/ToRegisterButton.vue'
+import Register from '@/components/Register.vue';
 
 const calendarOptions = reactive({
   plugins: [dayGridPlugin, interactionPlugin],
@@ -186,6 +188,19 @@ const formatDate = (date) => {
   const day = String(d.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
+
+const isVisibleRegistComponent = ref(false);
+const handleShowRegistComponent = (value) => {
+    isVisibleRegistComponent.value = value
+}
+
+const windowClickHandler = () => {
+    isEditWindowShow.value = false
+}
+
+const stopPropagation = (event) => {
+    event.stopPropagation();
+}
 </script>
 
 <style scoped>
