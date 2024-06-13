@@ -21,7 +21,7 @@
     import axios from "axios";
     import { reactive, ref } from "vue";
     export default {
-    name: "Signup",
+    name: "SignUp",
     setup() {
         let pwd1 = ref("");
         let c = reactive({
