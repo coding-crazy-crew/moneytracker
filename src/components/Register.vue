@@ -106,7 +106,7 @@ export default {
             const dataJson = JSON.stringify(data)
             try{
                 const response = await axios.post(url, dataJson, {"Content-Type":"application/json"})
-                router.go(-1)
+                router.push("/list")
             } catch(err) {
                 console.log(err)
                 router.push("/")
