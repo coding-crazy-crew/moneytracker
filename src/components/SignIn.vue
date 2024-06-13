@@ -1,7 +1,8 @@
 <template lang="">
     <div class="outer">
             <div class="mb-3 mt-3" style="text-align: -webkit-center;">
-        <h2>로그인 페이지</h2>
+        <h2>Money Tracker</h2>
+                <button @click.preventDefault="switchSignUpHandler" class="btn-signup">회원가입</button>
         <form @submit.prevent="loginFormSubmitHandler">
             <div class="input-list">
                 <label for="i">아이디:</label>
@@ -11,7 +12,6 @@
                 <button class="btn btn-success"> 로그인</button>
             </div>
             </form>
-                <button @click.preventDefault="switchSignUpHandler" class="btn btn-success">회원가입</button>
                 </div>
         </div>
 </template>
@@ -75,5 +75,9 @@ export default {
     .input-list {
         width: 60%;
         text-align: left;
+    }
+    .btn-signup{
+        background-color: transparent;
+        border:none
     }
 </style>
