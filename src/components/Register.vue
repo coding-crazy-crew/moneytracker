@@ -85,7 +85,7 @@
 <script>
 import {reactive,onMounted} from 'vue'
 import axios from 'axios'
-import {useRouter} from 'vue-router'
+import {useRouter,useRoute} from 'vue-router'
 import { useLoginInfoStore } from '@/stores/LoginInfo';
 
 export default {
