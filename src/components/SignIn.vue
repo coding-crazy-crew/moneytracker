@@ -35,9 +35,11 @@ export default {
                 pwd: pwd.value
             }
             try{
-                const response = await axios.post(url+"?userId="+data.id+"&pwd="+data.pwd, {"Content-Type": "application/json"})
-                console.log(response.data)
+                console.log(url+"?userId="+data.id+"&pwd="+data.pwd)
+                const response = await axios.get(url+"?userId="+data.id+"&pwd="+data.pwd)
+                console.log(response.data[0].userId)
                 successLoginHandler(response.data,data)
+                
             }catch(err){
                 console.log(err.message)
             }

@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, onUpdated, computed } from 'vue'
 import axios from "axios"
 import MonthlyExpenditure from '@/components/MonthlyExpenditure.vue'
 import CategoryPieChart from '@/components/CategoryPieChart.vue'
@@ -39,6 +39,8 @@ const currentDate = ref(new Date())
 const isVisibleRegistComponent = ref(false);
 
 const store = useLoginInfoStore()
+
+console.log('om Home getLoginId=', store.getLoginId)
 const router = useRouter()
 
 const getEveryRecords = async () => {
@@ -86,11 +88,13 @@ const updateMonthlyRecords = (records) => {
 }
 
 onMounted(() => {
+
     if(store.getLoginId ===0){
         router.push('/settings')
     }
     getEveryRecords()
 })
+
 </script>
 
 <style scoped>

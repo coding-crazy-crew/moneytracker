@@ -37,10 +37,10 @@
     setup() {
         let pwd1 = ref("");
         let c = reactive({
-        userId: "",
-        id:0,
-        pwd: "",
-        name: "",
+            id:0,
+            userId: "",
+            pwd: "",
+            name: "",
         });
         const profile = ref("");
         const isBtSignup = ref(false)
@@ -52,8 +52,9 @@
             const ids = data.map((memo)=>{
                     return memo.id;
             }) //ids: [1,2,3]
+            console.log(ids)
             const maxId = ids.length ==0? 0 : Math.max(...ids)
-            
+            console.log(maxId)
             c.id= maxId +1
 
         }
@@ -85,6 +86,7 @@
                 
                 const data = JSON.stringify(c);
                 try{
+                    console.log(data)
                     const response = await axios.post(url,data,{"Content-Type": "application/json"})
                     console.log(response)
                     router.push('/settings')

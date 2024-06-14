@@ -129,6 +129,7 @@ export default {
                 const response = await axios.post(url, dataJson, {"Content-Type":"application/json"})
                 if(route.path==='/list') {
                     location.reload()
+                    // router.push("/list")
                 }else{
                     router.push("/list")
                 }
