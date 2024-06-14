@@ -55,6 +55,7 @@ const categoryExpenses = reactive({
 
 const isDataReady = ref(false)
 
+// 해당 년 월의 지출 내역을 카테고리별로 분류합니다.
 const updateCategoryExpenses = () => {
     if (!props.records || !Array.isArray(props.records)) {
         console.warn('Invalid records array')
@@ -96,6 +97,7 @@ const chartOptions = ref({
     }
 })
 
+// watch를 통해 년, 월이 바뀔때마다 데이터를 분류합니다.
 watch(() => props.records, updateCategoryExpenses, { immediate: true })
 </script>
 
@@ -126,8 +128,8 @@ h5 {
 .chart-container {
     flex: 6;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: left;
+    align-items: left;
     height: auto;
     width: 60%;
     margin-top: 10%;
@@ -152,8 +154,10 @@ h5 {
 
 .legend-item {
     display: flex;
-    align-items: center;
+    align-items: left;
     margin-bottom: 8px;
+    justify-content: left;
+    align-items: left;
 }
 
 .legend-color {

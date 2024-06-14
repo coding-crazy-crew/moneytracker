@@ -41,6 +41,7 @@ const isVisibleRegistComponent = ref(false);
 const store = useLoginInfoStore()
 const router = useRouter()
 
+// Home에서 데이터를 가져오고 자식 컴포넌트로 넘겨줍니다.
 const getEveryRecords = async () => {
     const url = "http://localhost:3000/data"
     const query = "?userId="+store.getLoginId
@@ -57,12 +58,14 @@ const formattedDate = computed(() => {
     return `${currentDate.value.getFullYear()}년 ${currentDate.value.getMonth() + 1}월`
 })
 
+// 이전 월을 click event 발생 시 계산합니다.
 const prevMonth = () => {
     const date = new Date(currentDate.value)
     date.setMonth(date.getMonth() - 1)
     currentDate.value = date
 }
 
+// 다음 월을 click event 발생 시 계산합니다.
 const nextMonth = () => {
     const date = new Date(currentDate.value)
     date.setMonth(date.getMonth() + 1)

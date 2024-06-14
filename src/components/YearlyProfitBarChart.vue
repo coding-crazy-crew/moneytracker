@@ -40,12 +40,14 @@ const props = defineProps({
 const currentYear = ref(props.currentDate.getFullYear())
 const yearlyProfitMap = reactive(new Map())
 
+// 그래프 데이터 저장을 위해 맵을 사용하였습니다.
 const initializeMap = () => {
     for (let i = 1; i <= 12; i++) {
         yearlyProfitMap.set(i, 0)
     }
 }
 
+// 년도의 데이터를 월별로 분류합니다.
 const filterByMonth = () => {
     initializeMap()
 

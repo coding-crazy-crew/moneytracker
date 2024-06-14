@@ -34,6 +34,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 
+// Home 부모 컴포넌트로부터 받아올 데이터들의 정의해줍니다.
 const props = defineProps({
     recordList: {
         type: Object, 
@@ -55,6 +56,7 @@ const totalIncome = ref(0)
 const totalExpenses = ref(0)
 const monthlyRecords = ref([])
 
+// 받아온 전체 데이터에서 해당 년 월의 데이터로 필터링합니다.
 const filterMonthRecord = () => {
     const year = props.currentDate.getFullYear()
     const month = props.currentDate.getMonth() + 1
@@ -71,6 +73,7 @@ const filterMonthRecord = () => {
     emit('updateRecords', monthlyRecords.value)
 }
 
+// 지출과 수입 내역을 분류합니다.
 const filterIncomeAndExpenses = () => {
     totalIncome.value = 0
     totalExpenses.value = 0
@@ -87,6 +90,7 @@ const profit = computed(() => {
     return totalIncome.value - totalExpenses.value
 })
 
+// 년, 월 변경 시마다 필터링 진행
 watch(() => props.currentDate, filterMonthRecord, { immediate: true })
 watch(() => props.recordList, filterMonthRecord, { immediate: true })
 </script>
