@@ -1,5 +1,5 @@
 <template lang="">
-    <div class="outer">
+    <div class="register-window" @click.stop>
         <div class="main-content">
             <form :class="register" @submit.prevent="registFormSubmitHandler">
                 <button 
@@ -35,7 +35,7 @@
                             v-model="tradeHistoryData.amount"
                         />
                         <label for="category" class="form-label">분류</label>
-                        <select class="form-select" v-model="tradeHistoryData.category">
+                        <select class="form-select" v-model="tradeHistoryData.category" v-if="tradeHistoryData.type==='expenses'">
                             <option>식비</option>
                             <option>교통/차량</option>
                             <option>문화생활</option>
@@ -47,6 +47,14 @@
                             <option>교육</option>
                             <option>경조사/회비</option>
                             <option>부모님</option>
+                            <option>기타</option>
+                        </select>
+                        <select class="form-select" v-model="tradeHistoryData.category" v-if="tradeHistoryData.type==='income'">
+                            <option>월급</option>
+                            <option>부수입</option>
+                            <option>용돈</option>
+                            <option>상여</option>
+                            <option>금융소득</option>
                             <option>기타</option>
                         </select>
                         <label for="asset" class="form-label">자산</label>
@@ -68,7 +76,7 @@
                 </div>
                 <div class="bottom-button">
                     <button type="submit" class="btn btn-success">저장</button>
-                    <button type="button" class="btn btn-success" @click="registMoreEvent">계속</button>
+                    <button type="button" class="btn btn-success" @click="registMoreEvent">저장 후 계속</button>
                 </div>
             </form>
         </div>
@@ -94,6 +102,7 @@ export default {
             asset: '',
             content: '',
         })
+
         const router = useRouter()
 
         onMounted(async() => {
@@ -103,6 +112,7 @@ export default {
         })
 
 
+        const route = useRoute()
         const registFormSubmitHandler = async (e) => {
             const url = `http://localhost:3000/data`
             const data = tradeHistoryData
@@ -117,7 +127,11 @@ export default {
             const dataJson = JSON.stringify(data)
             try{
                 const response = await axios.post(url, dataJson, {"Content-Type":"application/json"})
-                router.go(-1)
+                if(route.path==='/list') {
+                    location.reload()
+                }else{
+                    router.push("/list")
+                }
             } catch(err) {
                 console.log(err)
                 router.push("/")
@@ -128,6 +142,13 @@ export default {
         const registMoreEvent = async (e) => {
             const url = `http://localhost:3000/data`
             const data = tradeHistoryData
+            const response = await axios.get(url)
+            const ids = response.data.map((res) => {
+                return res.id;
+            })
+            const maxId = ids.length == 0 ? 0 : Math.max(...ids)
+            data.id = (maxId+1).toString();
+            data.amount = Number(data.amount)
             const dataJson = JSON.stringify(data)
             try{
                 const response = await axios.post(url, dataJson, {"Content-Type":"application/json"})
@@ -148,15 +169,21 @@ export default {
 }
 </script>
 <style scoped>
-    .outer {
-        background-color : #D8EFD3;
-        margin: 0;
-        padding: 0;
-        height: 98vh;
+    .register-window {
+        background-color: #D8EFD3;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border: 1px solid #000000;
+        box-shadow: 0px 0px 15px #00000029;
+        width: 400px;
+        z-index: 2;
+        overflow-y: auto;
     }
+
     
     .main-content {
-        height:100vh;
         background-color: #D8EFD3;
         margin: 0 auto;
         padding: 20px;

@@ -1,20 +1,23 @@
 <template>
-    <div class="outer">
+    <div class="outer" @click="windowClickHandler">
         <div class="main-content">
             <div class="month-bar">
                 <button @click="prevMonth" class="btn-icon"><i class="bi bi-caret-left-fill"></i></button>
                 <span class="currentMonth">{{ formattedDate }}</span>
                 <button @click="nextMonth" class="btn-icon"><i class="bi bi-caret-right-fill"></i></button>
             </div>
-            <MonthlyExpenditure :recordList="recordList" 
-            :currentDate="currentDate"
-            :formattedDate="formattedDate"
-            @updateRecords="updateMonthlyRecords" />
+            <MonthlyExpenditure 
+                :recordList="recordList" 
+                :currentDate="currentDate" 
+                :formattedDate="formattedDate" 
+                @updateRecords="updateMonthlyRecords" 
+            />
             <div class="visual-datas">
                 <CategoryPieChart :records="monthlyRecords" />
                 <YearlyProfitBarChart :recordList="recordList" :currentDate="currentDate" />
             </div>
-            <ToRegisterButton />
+            <ToRegisterButton @show-regist-component="handleShowRegistComponent"/>
+            <Register v-if="isVisibleRegistComponent" />
         </div>
     </div>
 </template>
@@ -28,9 +31,12 @@ import YearlyProfitBarChart from '@/components/YearlyProfitBarChart.vue'
 import ToRegisterButton from '@/components/ToRegisterButton.vue'
 import { useLoginInfoStore } from '@/stores/LoginInfo'
 import { useRouter } from 'vue-router'
+import Register from '@/components/Register.vue';
 
 const recordList = ref([])
 const monthlyRecords = ref([])
+const currentDate = ref(new Date())
+const isVisibleRegistComponent = ref(false);
 
 const store = useLoginInfoStore()
 const router = useRouter()
@@ -47,12 +53,9 @@ const getEveryRecords = async () => {
     }
 }
 
-const currentDate = ref(new Date())
-
 const formattedDate = computed(() => {
     return `${currentDate.value.getFullYear()}년 ${currentDate.value.getMonth() + 1}월`
 })
-
 
 const prevMonth = () => {
     const date = new Date(currentDate.value)
@@ -66,7 +69,18 @@ const nextMonth = () => {
     currentDate.value = date
 }
 
-// MonthlyExpenditure에서 추출한 해당 월 정보를 records에 업데이트, CategoryPieChart에서 사용하도록 함
+const handleShowRegistComponent = (value) => {
+    isVisibleRegistComponent.value = value
+}
+
+const windowClickHandler = () => {
+    isVisibleRegistComponent.value = false
+}
+
+const stopPropagation = (event) => {
+    event.stopPropagation();
+}
+
 const updateMonthlyRecords = (records) => {
     monthlyRecords.value = records;
 }
