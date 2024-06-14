@@ -67,6 +67,7 @@ export default {
         const store =useLoginInfoStore()
         const router = useRouter()
 
+        //등록 컴포넌트 호출 변수값 설정
         const isVisibleRegistComponent = ref(false);
         const handleShowRegistComponent = (value) => {
             isVisibleRegistComponent.value = value

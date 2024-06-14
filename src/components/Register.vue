@@ -111,8 +111,10 @@ export default {
             }
         })
 
-        const {emit} = getCurrentInstance()
+        const {emit} = getCurrentInstance() // 저장 버튼 클릭 시 등록 컴포넌트 상태 변경을 위한 변수
         const route = useRoute()
+
+        // 저장 버튼 클릭 시 서버에 거래내역 전송
         const registFormSubmitHandler = async (e) => {
             const url = `http://localhost:3000/data`
             const data = tradeHistoryData
@@ -139,7 +141,7 @@ export default {
             }
         }
 
-
+        // 저장 후 계속 버튼 클릭 시 서버에 데이터 전송
         const registMoreEvent = async (e) => {
             const url = `http://localhost:3000/data`
             const data = tradeHistoryData
@@ -153,16 +155,23 @@ export default {
             const dataJson = JSON.stringify(data)
             try{
                 const response = await axios.post(url, dataJson, {"Content-Type":"application/json"})
-                location.reload();
+                if(route.path==='/list') {
+                    emit('showRegistComponent', false)
+                    router.push("/list")
+                }else{
+                    router.push("/list")
+                }
             } catch(err) {
                 alert(err.response.data)
             }
         }
         
+        // 수입인지 지출인지 저장하는 함수
         const setTradeType = (type) => {
             tradeHistoryData.type = type;
         }
 
+        // default로 수입 설정
         setTradeType('income');
 
         return {tradeHistoryData, registFormSubmitHandler, registMoreEvent, setTradeType}

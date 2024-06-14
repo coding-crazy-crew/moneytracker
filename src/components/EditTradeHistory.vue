@@ -101,8 +101,10 @@ export default {
             Object.assign(tradeHistoryData, newVal);
         })
 
-        const {emit} = getCurrentInstance()
+        const {emit} = getCurrentInstance() // 저장 버튼 클릭 시 등록 컴포넌트 상태 변경을 위한 변수
         const route = useRoute()
+
+        // 수정 버튼 클릭 시 서버에 거래내역 전송
         const editFormSubmitHandler = async (e) => {
             const url = `http://localhost:3000/data/${tradeHistoryData.id}`
             tradeHistoryData.amount = Number(tradeHistoryData.amount)
@@ -121,6 +123,7 @@ export default {
             }
         }
         
+        // 삭제 버튼 클릭 시 서버에 삭제할 데이터의 ID 전송
         const deleteTradeHistory = async () => {
             const url = `http://localhost:3000/data/${tradeHistoryData.id}`;
             try {
@@ -141,7 +144,7 @@ export default {
             tradeHistoryData.type = type;
         }
 
-        setTradeType('income');
+        setTradeType(tradeHistoryData.type);
 
         return {tradeHistoryData, editFormSubmitHandler, deleteTradeHistory, setTradeType}
     }
