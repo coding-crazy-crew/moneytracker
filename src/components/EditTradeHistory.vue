@@ -83,9 +83,9 @@
         </div>
 </template>
 <script>
-import {reactive, watch} from 'vue'
+import {reactive, watch, getCurrentInstance} from 'vue'
 import axios from 'axios'
-import {useRouter} from 'vue-router'
+import {useRouter, useRoute} from 'vue-router'
 import { defineProps } from 'vue';
 
 export default {
@@ -101,13 +101,20 @@ export default {
             Object.assign(tradeHistoryData, newVal);
         })
 
+        const {emit} = getCurrentInstance()
+        const route = useRoute()
         const editFormSubmitHandler = async (e) => {
             const url = `http://localhost:3000/data/${tradeHistoryData.id}`
             tradeHistoryData.amount = Number(tradeHistoryData.amount)
             const dataJson = JSON.stringify(tradeHistoryData)
             try {
                 await axios.put(url, dataJson, { "Content-Type": "application/json" });
-                location.reload();
+                if(route.path==='/list') {
+                    emit('showRegistComponent', false)
+                    router.push("/list")
+                }else{
+                    router.push("/list")
+                }
             } catch (err) {
                 console.log(err);
                 alert("수정에 실패했습니다.");
@@ -118,7 +125,12 @@ export default {
             const url = `http://localhost:3000/data/${tradeHistoryData.id}`;
             try {
                 await axios.delete(url);
-                location.reload();
+                if(route.path==='/list') {
+                    emit('showRegistComponent', false)
+                    router.push("/list")
+                }else{
+                    router.push("/list")
+                }
             } catch (err) {
                 console.log(err);
                 alert("삭제에 실패했습니다.");

@@ -41,8 +41,8 @@
             </div>
         </div>
         <toRegisterButton @show-regist-component="handleShowRegistComponent"/>
-        <EditTradeHistory v-if="isEditWindowShow" :tradeHistoryData="clickedObj"/>
-        <Register v-if="isVisibleRegistComponent"/>
+        <EditTradeHistory @show-regist-component="handleShowRegistComponent" v-if="isEditWindowShow" :tradeHistoryData="clickedObj"/>
+        <Register @show-regist-component="handleShowRegistComponent" v-if="isVisibleRegistComponent"/>
     </div>
 </template>
 <script>
@@ -71,6 +71,7 @@ export default {
         const handleShowRegistComponent = (value) => {
             isVisibleRegistComponent.value = value
             isEditWindowShow.value = false
+            getCurrentMonthList();
         }
 
         onMounted(async() => {

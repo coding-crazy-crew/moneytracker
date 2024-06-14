@@ -83,7 +83,7 @@
     </div>
 </template>
 <script>
-import {reactive,onMounted} from 'vue'
+import {reactive,onMounted, getCurrentInstance} from 'vue'
 import axios from 'axios'
 import {useRouter,useRoute} from 'vue-router'
 import { useLoginInfoStore } from '@/stores/LoginInfo';
@@ -111,7 +111,7 @@ export default {
             }
         })
 
-
+        const {emit} = getCurrentInstance()
         const route = useRoute()
         const registFormSubmitHandler = async (e) => {
             const url = `http://localhost:3000/data`
@@ -128,7 +128,8 @@ export default {
             try{
                 const response = await axios.post(url, dataJson, {"Content-Type":"application/json"})
                 if(route.path==='/list') {
-                    location.reload()
+                    emit('showRegistComponent', false)
+                    router.push("/list")
                 }else{
                     router.push("/list")
                 }
